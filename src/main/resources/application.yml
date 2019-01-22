@@ -4,10 +4,16 @@ server:
     uri-encoding: UTF-8
     max-threads: 1000
     min-spare-threads: 30
-  port: 8080
+  port: 8081
   connection-timeout: 5000ms
   servlet:
     context-path: /
+
+# 节点数据接口
+node:
+  url: http://18.191.18.104:31003/v1
+  messages: /getmessageInfo
+  transaction: /getmessagelist
 
 client:
   ws_protocol: ws://

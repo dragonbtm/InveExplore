@@ -20,11 +20,42 @@ public class CommonConfig {
 	}
 
 	//websocket链接信息
-
 	private static String ws_protocol;
 
-
 	private static String wsUrl;
+
+	//节点数据
+	private static String nodeUrl;
+	private static String nodeMessages;
+	private static String nodeTransaction;
+
+
+	public static String getNodeUrl() {
+		return nodeUrl;
+	}
+
+	@Value("${node.url}")
+	public  void setNodeUrl(String nodeUrl) {
+		this.nodeUrl = nodeUrl;
+	}
+
+	public static String getNodeMessages() {
+		return nodeMessages;
+	}
+
+	@Value("${node.messages}")
+	public void setNodeMessages(String nodeMessages) {
+		this.nodeMessages = nodeMessages;
+	}
+
+	public static String getNodeTransaction() {
+		return nodeTransaction;
+	}
+
+	@Value("${node.transaction}")
+	public void setNodeTransaction(String nodeTransaction) {
+		this.nodeTransaction = nodeTransaction;
+	}
 
 	public static String getWs_protocol() {
 		return ws_protocol;

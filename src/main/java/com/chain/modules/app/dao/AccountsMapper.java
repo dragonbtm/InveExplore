@@ -1,7 +1,9 @@
 package com.chain.modules.app.dao;
 
 import com.chain.modules.app.entity.Accounts;
+import org.apache.ibatis.annotations.Mapper;
 
+@Mapper
 public interface AccountsMapper {
     int deleteByPrimaryKey(Long id);
 

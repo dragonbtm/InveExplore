@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
  * @Date: 下午 7:21 2019/1/15 0015
  * @Modified By
  */
-@Service("AcountsService")
+@Service("acountsService")
 public class AccountServiceImpl implements AccountsService {
 
 
