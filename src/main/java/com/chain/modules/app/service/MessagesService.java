@@ -1,5 +1,7 @@
 package com.chain.modules.app.service;
 
+import com.chain.common.utils.R;
+
 /**
  * @Author: zz
  * @Description:
@@ -8,4 +10,6 @@ package com.chain.modules.app.service;
  */
 public interface MessagesService {
     void getMessages();
+
+    R getGraphdDtas();
 }

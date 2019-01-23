@@ -4,14 +4,14 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.chain.common.utils.DateUtils;
 import com.chain.common.utils.HttpUtils;
+import com.chain.common.utils.R;
 import com.chain.config.CommonConfig;
+import com.chain.modules.app.dao.AccountsMapper;
 import com.chain.modules.app.dao.MessagesMapper;
 import com.chain.modules.app.entity.Messages;
 import com.chain.modules.app.service.MessagesService;
-import org.apache.ibatis.annotations.ResultMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -19,9 +19,10 @@ import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
-import java.time.Instant;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * @Author: zz
@@ -37,6 +38,12 @@ public class MessagesServiceImpl implements MessagesService {
     @Resource
     private MessagesMapper messagesMapper;
 
+    @Resource
+    private AccountsMapper accountsMapper;
+
+    /**
+     * 从局部全节点拉取历史信息
+     */
     @Override
     public void getMessages() {
         String url = CommonConfig.getNodeUrl() + CommonConfig.getNodeMessages();
@@ -91,5 +98,30 @@ public class MessagesServiceImpl implements MessagesService {
             e.printStackTrace();
             log.error("getMessages error ~!" ,e);
         }
+    }
+
+    /**
+     *
+     * @return
+     */
+    @Override
+    public R getGraphdDtas() {
+        //14天消息数量
+        List<Integer> messages = messagesMapper.selectTrans();
+        int msgSiz = 14 - messages.size();
+        if(msgSiz > 0) {
+            for (int i = 0 ; i < msgSiz ; i++)
+                messages.add(0,0);
+        }
+        //14天用户数量
+        List<Integer> accounts = accountsMapper.selectAccs();
+        msgSiz = 14 - accounts.size();
+        if(msgSiz > 0) {
+            for (int i = 0 ; i < msgSiz ; i++)
+                accounts.add(0,0);
+        }
+
+
+        return R.ok().put("messages",messages).put("accounts",accounts);
     }
 }

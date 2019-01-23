@@ -1,6 +1,7 @@
 package com.chain.modules.app.controller;
 
 import com.chain.common.utils.R;
+import com.chain.modules.app.service.MessagesService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.stereotype.Controller;
@@ -8,6 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.Resource;
 
 /**
  * @Author: zz
@@ -19,6 +22,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/v1/node")
 @Api("3节点信息")
 public class NodeController {
+
+
+    @Resource
+    private MessagesService messagesService;
 
     @GetMapping("/preview")
     @ApiOperation("全网预览")
@@ -50,8 +57,7 @@ public class NodeController {
     @PostMapping("/graphdatas")
     @ApiOperation("图表数据")
     public R graphdatas() {
-
-        return new R();
+        return messagesService.getGraphdDtas();
     }
 
 

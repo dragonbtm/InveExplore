@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.Date;
+import java.util.List;
 
 @Mapper
 public interface MessagesMapper {
@@ -22,4 +23,11 @@ public interface MessagesMapper {
 
     @Select("SELECT * FROM db_messages msg WHERE msg.create_time = #{date,jdbcType=TIMESTAMP}")
     Messages selectByCreateTime(Date date);
+
+    @Select("SELECT count(1), FROM_UNIXTIME(t.updateTime/1000,'%Y%m%d') \n" +
+            "FROM db_transaction_0 t  \n" +
+            "where date(FROM_UNIXTIME(t.updateTime/1000,'%Y%m%d')) >=date_sub(curdate(),interval 14 day)and DATE(FROM_UNIXTIME(t.updateTime/1000,'%Y%m%d')) <=  date_sub(CURDATE(),INTERVAL 1 DAY)\n" +
+            "GROUP BY FROM_UNIXTIME(t.updateTime/1000,'%Y%m%d') \n" +
+            "ORDER BY date(FROM_UNIXTIME(t.updateTime/1000,'%Y%m%d')) ASC")
+    List<Integer> selectTrans();
 }

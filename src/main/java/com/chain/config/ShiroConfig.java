@@ -67,6 +67,7 @@ public class ShiroConfig {
         filterMap.put("/swagger-resources/**", "anon");
         filterMap.put("/captcha.jpg", "anon");
         filterMap.put("/websocket", "anon");
+        filterMap.put("/v1/**", "anon");
 
         /** 拦截请求*/
         filterMap.put("/**", "oauth2");
