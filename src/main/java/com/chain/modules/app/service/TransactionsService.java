@@ -13,8 +13,9 @@ import com.chain.modules.app.entity.Transactions;
  * @Modified By
  */
 public interface TransactionsService {
-    void getTransactions();
+
     PageUtils getList(Map<String,Object> map);
+
     void requestTransactions();
 
     Transactions getTransactionByHash(String hash);

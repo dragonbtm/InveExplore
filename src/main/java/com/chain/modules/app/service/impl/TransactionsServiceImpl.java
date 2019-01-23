@@ -168,10 +168,6 @@ public class TransactionsServiceImpl extends ServiceImpl<TransactionsMapper,Tran
 
     }
 
-    @Override
-    public void getTransactions() {
-
-    }
 
     @Override
     public PageUtils getList(@RequestParam Map<String, Object> map) {
