@@ -1,7 +1,9 @@
 package com.chain.modules.app.entity;
 
-import java.math.BigDecimal;
+import com.baomidou.mybatisplus.annotations.TableName;
 
+import java.math.BigDecimal;
+@TableName("db_transaction_0")
 public class Transactions {
     private BigDecimal id;
 

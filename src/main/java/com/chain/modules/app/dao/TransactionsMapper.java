@@ -1,5 +1,6 @@
 package com.chain.modules.app.dao;
 
+import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.chain.modules.app.entity.Transactions;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -7,10 +8,10 @@ import org.apache.ibatis.annotations.Select;
 import java.math.BigDecimal;
 
 @Mapper
-public interface TransactionsMapper {
+public interface TransactionsMapper extends BaseMapper<Transactions> {
     int deleteByPrimaryKey(BigDecimal id);
 
-    int insert(Transactions record);
+    Integer insert(Transactions record);
 
     int insertSelective(Transactions record);
 

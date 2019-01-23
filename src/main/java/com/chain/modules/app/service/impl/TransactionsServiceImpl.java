@@ -3,9 +3,11 @@ package com.chain.modules.app.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.chain.common.utils.DateUtils;
-import com.chain.common.utils.HttpUtils;
-import com.chain.common.utils.JsonUtil;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.service.IService;
+import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.chain.common.utils.*;
 import com.chain.config.CommonConfig;
 import com.chain.modules.app.dao.AccountsMapper;
 import com.chain.modules.app.dao.TransactionsIndexMapper;
@@ -20,16 +22,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.annotation.Resource;
 import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @Author: zz
@@ -38,7 +38,7 @@ import java.util.Set;
  * @Modified By
  */
 @Service("transactionsService")
-public class TransactionsServiceImpl implements TransactionsService {
+public class TransactionsServiceImpl extends ServiceImpl<TransactionsMapper,Transactions> implements TransactionsService {
     private Logger log = LoggerFactory.getLogger(getClass());
 
 
@@ -166,6 +166,21 @@ public class TransactionsServiceImpl implements TransactionsService {
         }
 
 
+    }
+
+    @Override
+    public PageUtils getList(@RequestParam Map<String, Object> map) {
+        String typeId= (String) map.get("typeId");
+        EntityWrapper<Transactions> et=new EntityWrapper<Transactions>();
+        if(typeId!=null&&typeId!=""){
+            et.eq("type",typeId);
+        }
+        Page<Transactions> page = this.selectPage(
+                new Query<Transactions>(map).getPage(),
+                et
+        );
+
+        return new PageUtils(page);
     }
 
     @Override

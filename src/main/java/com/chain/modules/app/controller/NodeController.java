@@ -1,7 +1,9 @@
 package com.chain.modules.app.controller;
 
+import com.chain.common.utils.PageUtils;
 import com.chain.common.utils.R;
 import com.chain.modules.app.service.MessagesService;
+import com.chain.modules.app.service.TransactionsService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.Map;
 
 /**
  * @Author: zz
@@ -27,6 +30,9 @@ public class NodeController {
     @Autowired
     private MessagesService messagesService;
 
+    @Autowired
+    private TransactionsService transactionsService;
+
 
 
     @GetMapping("/preview")
@@ -38,12 +44,13 @@ public class NodeController {
     }
 
 
-    @PostMapping("/messageslist")
+    @GetMapping("/messageslist")
     @ApiOperation("消息列表")
-    public R messagesList() {
-
-        return new R();
+    public R messagesList(@RequestParam Map<String,Object> map) {
+        PageUtils pageUtils =transactionsService.getList(map);
+        return R.ok().put("page",pageUtils);
     }
+
 
 
     @PostMapping("/messagesinfo")
