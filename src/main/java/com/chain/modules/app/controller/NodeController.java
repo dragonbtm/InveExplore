@@ -52,14 +52,13 @@ public class NodeController {
 
     @PostMapping("/messagesinfo")
     @ApiOperation("消息详细信息")
-    public R messagesinfo() {
-
-        return new R();
+    public R messagesinfo(String hash) {
+        return messagesService.getTransactionInfo(hash);
     }
 
 
 
-    @PostMapping("/graphdatas")
+    @GetMapping("/graphdatas")
     @ApiOperation("图表数据")
     public R graphdatas() {
         return messagesService.getGraphdDtas();
