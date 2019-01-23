@@ -1,5 +1,9 @@
 package com.chain.modules.app.service;
 
+import com.chain.modules.app.entity.Messages;
+
+import java.util.Map;
+
 import com.chain.common.utils.R;
 
 /**
@@ -10,6 +14,7 @@ import com.chain.common.utils.R;
  */
 public interface MessagesService {
     void getMessages();
+    Map<String,Object> selectByNull();
 
     R getGraphdDtas();
 }

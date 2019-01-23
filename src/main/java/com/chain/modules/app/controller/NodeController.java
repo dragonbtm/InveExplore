@@ -4,6 +4,7 @@ import com.chain.common.utils.R;
 import com.chain.modules.app.service.MessagesService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,17 +24,17 @@ import javax.annotation.Resource;
 @Api("3节点信息")
 public class NodeController {
 
-
-    @Resource
+    @Autowired
     private MessagesService messagesService;
+
+
 
     @GetMapping("/preview")
     @ApiOperation("全网预览")
     public R preview() {
 
+     return R.ok(messagesService.selectByNull());
 
-
-        return new R();
     }
 
 

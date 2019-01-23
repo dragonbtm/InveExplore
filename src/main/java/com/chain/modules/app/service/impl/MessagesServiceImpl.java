@@ -2,13 +2,18 @@ package com.chain.modules.app.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.chain.common.utils.DateUtils;
 import com.chain.common.utils.HttpUtils;
 import com.chain.common.utils.R;
 import com.chain.config.CommonConfig;
 import com.chain.modules.app.dao.AccountsMapper;
 import com.chain.modules.app.dao.MessagesMapper;
+import com.chain.modules.app.dao.TransactionsMapper;
+import com.chain.modules.app.entity.Accounts;
 import com.chain.modules.app.entity.Messages;
+import com.chain.modules.app.entity.Transactions;
+import com.chain.modules.app.service.AccountsService;
 import com.chain.modules.app.service.MessagesService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +27,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.List;
 
 /**
@@ -37,9 +43,12 @@ public class MessagesServiceImpl implements MessagesService {
 
     @Resource
     private MessagesMapper messagesMapper;
-
+    @Resource
+    private TransactionsMapper transactionsMapper;
     @Resource
     private AccountsMapper accountsMapper;
+
+
 
     /**
      * 从局部全节点拉取历史信息
@@ -98,6 +107,22 @@ public class MessagesServiceImpl implements MessagesService {
             e.printStackTrace();
             log.error("getMessages error ~!" ,e);
         }
+    }
+
+    @Override
+    public  Map<String,Object> selectByNull() {
+
+        Date date = DateUtils.stringToDate(DateUtils.format(new Date(), "yyyy-MM-dd"),"yyyy-MM-dd");
+        Messages messages = messagesMapper.selectByCreateTime(date);
+        Map<String,Object> map=new HashMap<String,Object>();
+        map.put("messages",messages);
+        int messageTotal=transactionsMapper.selectMessageTotal();
+        map.put("messageTotal",messageTotal);
+        Accounts accounts =accountsMapper.selectByDate(date);
+        map.put("accountsTotal",accounts.getNumber());
+        return map;
+
+
     }
 
     /**

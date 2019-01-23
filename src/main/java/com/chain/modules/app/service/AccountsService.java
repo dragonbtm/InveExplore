@@ -9,4 +9,6 @@ package com.chain.modules.app.service;
 public interface AccountsService {
 
     void getAccountsInfo();
+
+
 }

@@ -1,6 +1,7 @@
 package com.chain.modules.app.dao;
 
 import com.chain.modules.app.entity.Accounts;
+import com.chain.modules.app.entity.Messages;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 

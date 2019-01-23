@@ -18,4 +18,6 @@ public interface TransactionsMapper {
     int updateByPrimaryKeySelective(Transactions record);
 
     int updateByPrimaryKey(Transactions record);
+
+    int selectMessageTotal();
 }

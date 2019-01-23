@@ -138,4 +138,7 @@
       snapshot = #{snapshot,jdbcType=VARCHAR}
     where id = #{id,jdbcType=DECIMAL}
   </update>
+  <select id="selectMessageTotal" parameterType="com.chain.modules.app.entity.Transactions"  resultType="integer">
+    SELECT  COUNT(0) FROM db_transaction_0
+  </select>
 </mapper>
