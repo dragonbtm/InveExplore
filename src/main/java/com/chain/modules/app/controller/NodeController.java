@@ -8,10 +8,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.Map;
@@ -55,13 +52,14 @@ public class NodeController {
 
     @PostMapping("/messagesinfo")
     @ApiOperation("消息详细信息")
-    public R messagesinfo(String hash) {
-        return messagesService.getTransactionInfo(hash);
+    public R messagesinfo() {
+
+        return new R();
     }
 
 
 
-    @GetMapping("/graphdatas")
+    @PostMapping("/graphdatas")
     @ApiOperation("图表数据")
     public R graphdatas() {
         return messagesService.getGraphdDtas();
