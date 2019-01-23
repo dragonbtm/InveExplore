@@ -1,5 +1,7 @@
 package com.chain.modules.app.service;
 
+import com.chain.modules.app.entity.Transactions;
+
 /**
  * @Author: zz
  * @Description: 交易数据
@@ -7,5 +9,7 @@ package com.chain.modules.app.service;
  * @Modified By
  */
 public interface TransactionsService {
-    void getTransactions();
+    void requestTransactions();
+
+    Transactions getTransactionByHash(String hash);
 }

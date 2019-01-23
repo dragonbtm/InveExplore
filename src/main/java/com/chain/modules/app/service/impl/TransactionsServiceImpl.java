@@ -11,12 +11,10 @@ import com.chain.modules.app.dao.AccountsMapper;
 import com.chain.modules.app.dao.TransactionsIndexMapper;
 import com.chain.modules.app.dao.TransactionsMapper;
 import com.chain.modules.app.entity.Accounts;
-import com.chain.modules.app.entity.Messages;
 import com.chain.modules.app.entity.Transactions;
 import com.chain.modules.app.entity.TransactionsIndex;
 import com.chain.modules.app.rocksDB.RocksJavaUtil;
 import com.chain.modules.app.service.TransactionsService;
-import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,7 +56,7 @@ public class TransactionsServiceImpl implements TransactionsService {
      */
     @Override
     @Transactional
-    public void getTransactions() {
+    public void requestTransactions() {
         TransactionsIndex index = transactionsIndexMapper.selectAll();
         Integer tableIndex = 0;
         Integer offset = 0;
@@ -168,5 +166,11 @@ public class TransactionsServiceImpl implements TransactionsService {
         }
 
 
+    }
+
+    @Override
+    public Transactions getTransactionByHash(String hash) {
+
+        return transactionsMapper.selectByHash(hash);
     }
 }

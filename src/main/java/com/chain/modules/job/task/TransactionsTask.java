@@ -1,7 +1,5 @@
 package com.chain.modules.job.task;
 
-import com.chain.modules.app.entity.Transactions;
-import com.chain.modules.app.service.AccountsService;
 import com.chain.modules.app.service.TransactionsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +25,7 @@ public class TransactionsTask {
     //拉取账户信息
     public void getAccountNumber() {
         logger.info("定时任务开始 -->开始拉取交易信息~!");
-        transactionsService.getTransactions();
+        transactionsService.requestTransactions();
         logger.info("定时任务开始 -->拉取交易信息结束~!");
     }
 

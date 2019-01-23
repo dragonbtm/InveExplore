@@ -17,4 +17,6 @@ public interface MessagesService {
     Map<String,Object> selectByNull();
 
     R getGraphdDtas();
+
+    R getTransactionInfo(String hash);
 }

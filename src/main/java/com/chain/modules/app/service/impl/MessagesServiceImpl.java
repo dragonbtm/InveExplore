@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.chain.common.utils.DateUtils;
 import com.chain.common.utils.HttpUtils;
+import com.chain.common.utils.JsonUtil;
 import com.chain.common.utils.R;
 import com.chain.config.CommonConfig;
 import com.chain.modules.app.dao.AccountsMapper;
@@ -13,8 +14,10 @@ import com.chain.modules.app.dao.TransactionsMapper;
 import com.chain.modules.app.entity.Accounts;
 import com.chain.modules.app.entity.Messages;
 import com.chain.modules.app.entity.Transactions;
+import com.chain.modules.app.rocksDB.RocksJavaUtil;
 import com.chain.modules.app.service.AccountsService;
 import com.chain.modules.app.service.MessagesService;
+import com.chain.modules.app.service.TransactionsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -24,7 +27,6 @@ import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -48,6 +50,8 @@ public class MessagesServiceImpl implements MessagesService {
     @Resource
     private AccountsMapper accountsMapper;
 
+    @Resource
+    private TransactionsService transactionsService;
 
 
     /**
@@ -148,5 +152,17 @@ public class MessagesServiceImpl implements MessagesService {
 
 
         return R.ok().put("messages",messages).put("accounts",accounts);
+    }
+
+    @Override
+    public R getTransactionInfo(String hash) {
+        RocksJavaUtil rocksDb = new RocksJavaUtil(CommonConfig.DBNUMBER);
+        byte[] d = rocksDb.get(hash);
+        if(d != null) {
+            String data = new String(d);
+            return R.ok().put("data", JSON.parseObject(data));
+        }else {
+            return R.error("the hash not exist");
+        }
     }
 }
