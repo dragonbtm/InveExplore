@@ -43,6 +43,7 @@
 		<java-websocket.version>1.3.9</java-websocket.version>
 		<jedis.version>2.1.0</jedis.version>
 		<jsch.version>0.1.53</jsch.version>
+		<rocksdbjni.version>5.9.2</rocksdbjni.version>
 
 		<!--wagon plugin 配置-->
 		<service-path>/work/renren</service-path>
@@ -53,6 +54,13 @@
 	</properties>
 
 	<dependencies>
+
+		<!-- rocksdb -->
+		<dependency>
+			<groupId>org.rocksdb</groupId>
+			<artifactId>rocksdbjni</artifactId>
+			<version>${rocksdbjni.version}</version>
+		</dependency>
 
 		<!--ssh 链接需要依赖-->
 		<dependency>

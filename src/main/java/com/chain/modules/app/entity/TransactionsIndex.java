@@ -13,6 +13,17 @@ public class TransactionsIndex {
 
     private Date updateTime;
 
+    public TransactionsIndex() {
+    }
+
+    private TransactionsIndex(Builder builder) {
+        setId(builder.id);
+        setTableindex(builder.tableindex);
+        setOffsets(builder.offsets);
+        setCreateTime(builder.createTime);
+        setUpdateTime(builder.updateTime);
+    }
+
     public Long getId() {
         return id;
     }
@@ -51,5 +62,45 @@ public class TransactionsIndex {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public static final class Builder {
+        private Long id;
+        private Integer tableindex;
+        private Integer offsets;
+        private Date createTime;
+        private Date updateTime;
+
+        public Builder() {
+        }
+
+        public Builder id(Long val) {
+            id = val;
+            return this;
+        }
+
+        public Builder tableindex(Integer val) {
+            tableindex = val;
+            return this;
+        }
+
+        public Builder offsets(Integer val) {
+            offsets = val;
+            return this;
+        }
+
+        public Builder createTime(Date val) {
+            createTime = val;
+            return this;
+        }
+
+        public Builder updateTime(Date val) {
+            updateTime = val;
+            return this;
+        }
+
+        public TransactionsIndex build() {
+            return new TransactionsIndex(this);
+        }
     }
 }

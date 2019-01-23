@@ -2,329 +2,140 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.chain.modules.app.dao.TransactionsMapper" >
   <resultMap id="BaseResultMap" type="com.chain.modules.app.entity.Transactions" >
-    <id column="id" property="id" jdbcType="CHAR" />
-    <result column="creation_date" property="creationDate" jdbcType="TIMESTAMP" />
-    <result column="amount" property="amount" jdbcType="BIGINT" />
-    <result column="fee" property="fee" jdbcType="BIGINT" />
-    <result column="amount_point" property="amountPoint" jdbcType="BIGINT" />
-    <result column="fee_point" property="feePoint" jdbcType="BIGINT" />
-    <result column="addressFrom" property="addressfrom" jdbcType="CHAR" />
-    <result column="addressTo" property="addressto" jdbcType="CHAR" />
-    <result column="type" property="type" jdbcType="INTEGER" />
-    <result column="sType" property="stype" jdbcType="INTEGER" />
-    <result column="eType" property="etype" jdbcType="INTEGER" />
-    <result column="percent" property="percent" jdbcType="DOUBLE" />
-    <result column="sConfirm" property="sconfirm" jdbcType="SMALLINT" />
-    <result column="eConfirm" property="econfirm" jdbcType="SMALLINT" />
-    <result column="sStatu" property="sstatu" jdbcType="SMALLINT" />
-    <result column="eStatu" property="estatu" jdbcType="SMALLINT" />
-  </resultMap>
-  <resultMap id="ResultMapWithBLOBs" type="com.chain.modules.app.entity.Transactions" extends="BaseResultMap" >
-    <result column="result" property="result" jdbcType="LONGVARCHAR" />
-    <result column="remark" property="remark" jdbcType="LONGVARCHAR" />
-    <result column="sHash" property="shash" jdbcType="LONGVARCHAR" />
-    <result column="eHash" property="ehash" jdbcType="LONGVARCHAR" />
-    <result column="sInfo" property="sinfo" jdbcType="LONGVARCHAR" />
-    <result column="eInfo" property="einfo" jdbcType="LONGVARCHAR" />
-    <result column="multiHash" property="multihash" jdbcType="LONGVARCHAR" />
+    <id column="id" property="id" jdbcType="DECIMAL" />
+    <result column="fromAddress" property="fromaddress" jdbcType="VARCHAR" />
+    <result column="toAddress" property="toaddress" jdbcType="VARCHAR" />
+    <result column="hash" property="hash" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="eHash" property="ehash" jdbcType="VARCHAR" />
+    <result column="isValid" property="isvalid" jdbcType="BIGINT" />
+    <result column="updateTime" property="updatetime" jdbcType="BIGINT" />
+    <result column="snapshot" property="snapshot" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, creation_date, amount, fee, amount_point, fee_point, addressFrom, addressTo, 
-    type, sType, eType, percent, sConfirm, eConfirm, sStatu, eStatu
+    id, fromAddress, toAddress, hash, type, eHash, isValid, updateTime, snapshot
   </sql>
-  <sql id="Blob_Column_List" >
-    result, remark, sHash, eHash, sInfo, eInfo, multiHash
-  </sql>
-  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.math.BigDecimal" >
     select 
     <include refid="Base_Column_List" />
-    ,
-    <include refid="Blob_Column_List" />
-    from db_transactions
-    where id = #{id,jdbcType=CHAR}
+    from db_transaction_0
+    where id = #{id,jdbcType=DECIMAL}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
-    delete from db_transactions
-    where id = #{id,jdbcType=CHAR}
+  <delete id="deleteByPrimaryKey" parameterType="java.math.BigDecimal" >
+    delete from db_transaction_0
+    where id = #{id,jdbcType=DECIMAL}
   </delete>
   <insert id="insert" parameterType="com.chain.modules.app.entity.Transactions" >
-    insert into db_transactions (id, creation_date, amount, 
-      fee, amount_point, fee_point, 
-      addressFrom, addressTo, type, 
-      sType, eType, percent, 
-      sConfirm, eConfirm, sStatu, 
-      eStatu, result, remark, 
-      sHash, eHash, sInfo, 
-      eInfo, multiHash)
-    values (#{id,jdbcType=CHAR}, #{creationDate,jdbcType=TIMESTAMP}, #{amount,jdbcType=BIGINT}, 
-      #{fee,jdbcType=BIGINT}, #{amountPoint,jdbcType=BIGINT}, #{feePoint,jdbcType=BIGINT}, 
-      #{addressfrom,jdbcType=CHAR}, #{addressto,jdbcType=CHAR}, #{type,jdbcType=INTEGER}, 
-      #{stype,jdbcType=INTEGER}, #{etype,jdbcType=INTEGER}, #{percent,jdbcType=DOUBLE}, 
-      #{sconfirm,jdbcType=SMALLINT}, #{econfirm,jdbcType=SMALLINT}, #{sstatu,jdbcType=SMALLINT}, 
-      #{estatu,jdbcType=SMALLINT}, #{result,jdbcType=LONGVARCHAR}, #{remark,jdbcType=LONGVARCHAR}, 
-      #{shash,jdbcType=LONGVARCHAR}, #{ehash,jdbcType=LONGVARCHAR}, #{sinfo,jdbcType=LONGVARCHAR}, 
-      #{einfo,jdbcType=LONGVARCHAR}, #{multihash,jdbcType=LONGVARCHAR})
+    insert into db_transaction_0 (id, fromAddress, toAddress, 
+      hash, type, eHash, 
+      isValid, updateTime, snapshot
+      )
+    values (#{id,jdbcType=DECIMAL}, #{fromaddress,jdbcType=VARCHAR}, #{toaddress,jdbcType=VARCHAR}, 
+      #{hash,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{ehash,jdbcType=VARCHAR}, 
+      #{isvalid,jdbcType=BIGINT}, #{updatetime,jdbcType=BIGINT}, #{snapshot,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.chain.modules.app.entity.Transactions" >
-    insert into db_transactions
+    insert into db_transaction_0
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         id,
       </if>
-      <if test="creationDate != null" >
-        creation_date,
+      <if test="fromaddress != null" >
+        fromAddress,
       </if>
-      <if test="amount != null" >
-        amount,
+      <if test="toaddress != null" >
+        toAddress,
       </if>
-      <if test="fee != null" >
-        fee,
-      </if>
-      <if test="amountPoint != null" >
-        amount_point,
-      </if>
-      <if test="feePoint != null" >
-        fee_point,
-      </if>
-      <if test="addressfrom != null" >
-        addressFrom,
-      </if>
-      <if test="addressto != null" >
-        addressTo,
+      <if test="hash != null" >
+        hash,
       </if>
       <if test="type != null" >
         type,
       </if>
-      <if test="stype != null" >
-        sType,
-      </if>
-      <if test="etype != null" >
-        eType,
-      </if>
-      <if test="percent != null" >
-        percent,
-      </if>
-      <if test="sconfirm != null" >
-        sConfirm,
-      </if>
-      <if test="econfirm != null" >
-        eConfirm,
-      </if>
-      <if test="sstatu != null" >
-        sStatu,
-      </if>
-      <if test="estatu != null" >
-        eStatu,
-      </if>
-      <if test="result != null" >
-        result,
-      </if>
-      <if test="remark != null" >
-        remark,
-      </if>
-      <if test="shash != null" >
-        sHash,
-      </if>
       <if test="ehash != null" >
         eHash,
       </if>
-      <if test="sinfo != null" >
-        sInfo,
+      <if test="isvalid != null" >
+        isValid,
       </if>
-      <if test="einfo != null" >
-        eInfo,
+      <if test="updatetime != null" >
+        updateTime,
       </if>
-      <if test="multihash != null" >
-        multiHash,
+      <if test="snapshot != null" >
+        snapshot,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
-        #{id,jdbcType=CHAR},
+        #{id,jdbcType=DECIMAL},
       </if>
-      <if test="creationDate != null" >
-        #{creationDate,jdbcType=TIMESTAMP},
+      <if test="fromaddress != null" >
+        #{fromaddress,jdbcType=VARCHAR},
       </if>
-      <if test="amount != null" >
-        #{amount,jdbcType=BIGINT},
+      <if test="toaddress != null" >
+        #{toaddress,jdbcType=VARCHAR},
       </if>
-      <if test="fee != null" >
-        #{fee,jdbcType=BIGINT},
-      </if>
-      <if test="amountPoint != null" >
-        #{amountPoint,jdbcType=BIGINT},
-      </if>
-      <if test="feePoint != null" >
-        #{feePoint,jdbcType=BIGINT},
-      </if>
-      <if test="addressfrom != null" >
-        #{addressfrom,jdbcType=CHAR},
-      </if>
-      <if test="addressto != null" >
-        #{addressto,jdbcType=CHAR},
+      <if test="hash != null" >
+        #{hash,jdbcType=VARCHAR},
       </if>
       <if test="type != null" >
-        #{type,jdbcType=INTEGER},
-      </if>
-      <if test="stype != null" >
-        #{stype,jdbcType=INTEGER},
-      </if>
-      <if test="etype != null" >
-        #{etype,jdbcType=INTEGER},
-      </if>
-      <if test="percent != null" >
-        #{percent,jdbcType=DOUBLE},
-      </if>
-      <if test="sconfirm != null" >
-        #{sconfirm,jdbcType=SMALLINT},
-      </if>
-      <if test="econfirm != null" >
-        #{econfirm,jdbcType=SMALLINT},
-      </if>
-      <if test="sstatu != null" >
-        #{sstatu,jdbcType=SMALLINT},
-      </if>
-      <if test="estatu != null" >
-        #{estatu,jdbcType=SMALLINT},
-      </if>
-      <if test="result != null" >
-        #{result,jdbcType=LONGVARCHAR},
-      </if>
-      <if test="remark != null" >
-        #{remark,jdbcType=LONGVARCHAR},
-      </if>
-      <if test="shash != null" >
-        #{shash,jdbcType=LONGVARCHAR},
+        #{type,jdbcType=VARCHAR},
       </if>
       <if test="ehash != null" >
-        #{ehash,jdbcType=LONGVARCHAR},
+        #{ehash,jdbcType=VARCHAR},
       </if>
-      <if test="sinfo != null" >
-        #{sinfo,jdbcType=LONGVARCHAR},
+      <if test="isvalid != null" >
+        #{isvalid,jdbcType=BIGINT},
       </if>
-      <if test="einfo != null" >
-        #{einfo,jdbcType=LONGVARCHAR},
+      <if test="updatetime != null" >
+        #{updatetime,jdbcType=BIGINT},
       </if>
-      <if test="multihash != null" >
-        #{multihash,jdbcType=LONGVARCHAR},
+      <if test="snapshot != null" >
+        #{snapshot,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.chain.modules.app.entity.Transactions" >
-    update db_transactions
+    update db_transaction_0
     <set >
-      <if test="creationDate != null" >
-        creation_date = #{creationDate,jdbcType=TIMESTAMP},
+      <if test="fromaddress != null" >
+        fromAddress = #{fromaddress,jdbcType=VARCHAR},
       </if>
-      <if test="amount != null" >
-        amount = #{amount,jdbcType=BIGINT},
+      <if test="toaddress != null" >
+        toAddress = #{toaddress,jdbcType=VARCHAR},
       </if>
-      <if test="fee != null" >
-        fee = #{fee,jdbcType=BIGINT},
-      </if>
-      <if test="amountPoint != null" >
-        amount_point = #{amountPoint,jdbcType=BIGINT},
-      </if>
-      <if test="feePoint != null" >
-        fee_point = #{feePoint,jdbcType=BIGINT},
-      </if>
-      <if test="addressfrom != null" >
-        addressFrom = #{addressfrom,jdbcType=CHAR},
-      </if>
-      <if test="addressto != null" >
-        addressTo = #{addressto,jdbcType=CHAR},
+      <if test="hash != null" >
+        hash = #{hash,jdbcType=VARCHAR},
       </if>
       <if test="type != null" >
-        type = #{type,jdbcType=INTEGER},
-      </if>
-      <if test="stype != null" >
-        sType = #{stype,jdbcType=INTEGER},
-      </if>
-      <if test="etype != null" >
-        eType = #{etype,jdbcType=INTEGER},
-      </if>
-      <if test="percent != null" >
-        percent = #{percent,jdbcType=DOUBLE},
-      </if>
-      <if test="sconfirm != null" >
-        sConfirm = #{sconfirm,jdbcType=SMALLINT},
-      </if>
-      <if test="econfirm != null" >
-        eConfirm = #{econfirm,jdbcType=SMALLINT},
-      </if>
-      <if test="sstatu != null" >
-        sStatu = #{sstatu,jdbcType=SMALLINT},
-      </if>
-      <if test="estatu != null" >
-        eStatu = #{estatu,jdbcType=SMALLINT},
-      </if>
-      <if test="result != null" >
-        result = #{result,jdbcType=LONGVARCHAR},
-      </if>
-      <if test="remark != null" >
-        remark = #{remark,jdbcType=LONGVARCHAR},
-      </if>
-      <if test="shash != null" >
-        sHash = #{shash,jdbcType=LONGVARCHAR},
+        type = #{type,jdbcType=VARCHAR},
       </if>
       <if test="ehash != null" >
-        eHash = #{ehash,jdbcType=LONGVARCHAR},
+        eHash = #{ehash,jdbcType=VARCHAR},
       </if>
-      <if test="sinfo != null" >
-        sInfo = #{sinfo,jdbcType=LONGVARCHAR},
+      <if test="isvalid != null" >
+        isValid = #{isvalid,jdbcType=BIGINT},
       </if>
-      <if test="einfo != null" >
-        eInfo = #{einfo,jdbcType=LONGVARCHAR},
+      <if test="updatetime != null" >
+        updateTime = #{updatetime,jdbcType=BIGINT},
       </if>
-      <if test="multihash != null" >
-        multiHash = #{multihash,jdbcType=LONGVARCHAR},
+      <if test="snapshot != null" >
+        snapshot = #{snapshot,jdbcType=VARCHAR},
       </if>
     </set>
-    where id = #{id,jdbcType=CHAR}
-  </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.chain.modules.app.entity.Transactions" >
-    update db_transactions
-    set creation_date = #{creationDate,jdbcType=TIMESTAMP},
-      amount = #{amount,jdbcType=BIGINT},
-      fee = #{fee,jdbcType=BIGINT},
-      amount_point = #{amountPoint,jdbcType=BIGINT},
-      fee_point = #{feePoint,jdbcType=BIGINT},
-      addressFrom = #{addressfrom,jdbcType=CHAR},
-      addressTo = #{addressto,jdbcType=CHAR},
-      type = #{type,jdbcType=INTEGER},
-      sType = #{stype,jdbcType=INTEGER},
-      eType = #{etype,jdbcType=INTEGER},
-      percent = #{percent,jdbcType=DOUBLE},
-      sConfirm = #{sconfirm,jdbcType=SMALLINT},
-      eConfirm = #{econfirm,jdbcType=SMALLINT},
-      sStatu = #{sstatu,jdbcType=SMALLINT},
-      eStatu = #{estatu,jdbcType=SMALLINT},
-      result = #{result,jdbcType=LONGVARCHAR},
-      remark = #{remark,jdbcType=LONGVARCHAR},
-      sHash = #{shash,jdbcType=LONGVARCHAR},
-      eHash = #{ehash,jdbcType=LONGVARCHAR},
-      sInfo = #{sinfo,jdbcType=LONGVARCHAR},
-      eInfo = #{einfo,jdbcType=LONGVARCHAR},
-      multiHash = #{multihash,jdbcType=LONGVARCHAR}
-    where id = #{id,jdbcType=CHAR}
+    where id = #{id,jdbcType=DECIMAL}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.chain.modules.app.entity.Transactions" >
-    update db_transactions
-    set creation_date = #{creationDate,jdbcType=TIMESTAMP},
-      amount = #{amount,jdbcType=BIGINT},
-      fee = #{fee,jdbcType=BIGINT},
-      amount_point = #{amountPoint,jdbcType=BIGINT},
-      fee_point = #{feePoint,jdbcType=BIGINT},
-      addressFrom = #{addressfrom,jdbcType=CHAR},
-      addressTo = #{addressto,jdbcType=CHAR},
-      type = #{type,jdbcType=INTEGER},
-      sType = #{stype,jdbcType=INTEGER},
-      eType = #{etype,jdbcType=INTEGER},
-      percent = #{percent,jdbcType=DOUBLE},
-      sConfirm = #{sconfirm,jdbcType=SMALLINT},
-      eConfirm = #{econfirm,jdbcType=SMALLINT},
-      sStatu = #{sstatu,jdbcType=SMALLINT},
-      eStatu = #{estatu,jdbcType=SMALLINT}
-    where id = #{id,jdbcType=CHAR}
+    update db_transaction_0
+    set fromAddress = #{fromaddress,jdbcType=VARCHAR},
+      toAddress = #{toaddress,jdbcType=VARCHAR},
+      hash = #{hash,jdbcType=VARCHAR},
+      type = #{type,jdbcType=VARCHAR},
+      eHash = #{ehash,jdbcType=VARCHAR},
+      isValid = #{isvalid,jdbcType=BIGINT},
+      updateTime = #{updatetime,jdbcType=BIGINT},
+      snapshot = #{snapshot,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=DECIMAL}
   </update>
 </mapper>

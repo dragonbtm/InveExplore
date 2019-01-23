@@ -4,12 +4,13 @@
   <resultMap id="BaseResultMap" type="com.chain.modules.app.entity.Accounts" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="com.chain.modules.app.entity.Accounts" extends="BaseResultMap" >
     <result column="number" property="number" jdbcType="VARBINARY" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, create_time
+    id, create_time, update_time
   </sql>
   <sql id="Blob_Column_List" >
     number
@@ -27,10 +28,10 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.chain.modules.app.entity.Accounts" >
-    insert into db_accounts (id, create_time, number
-      )
-    values (#{id,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, #{number,jdbcType=VARBINARY}
-      )
+    insert into db_accounts (id, create_time, update_time, 
+      number)
+    values (#{id,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{number,jdbcType=VARBINARY})
   </insert>
   <insert id="insertSelective" parameterType="com.chain.modules.app.entity.Accounts" >
     insert into db_accounts
@@ -40,6 +41,9 @@
       </if>
       <if test="createTime != null" >
         create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
       </if>
       <if test="number != null" >
         number,
@@ -52,6 +56,9 @@
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
       <if test="number != null" >
         #{number,jdbcType=VARBINARY},
       </if>
@@ -63,6 +70,9 @@
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
       <if test="number != null" >
         number = #{number,jdbcType=VARBINARY},
       </if>
@@ -72,12 +82,14 @@
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.chain.modules.app.entity.Accounts" >
     update db_accounts
     set create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
       number = #{number,jdbcType=VARBINARY}
     where id = #{id,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.chain.modules.app.entity.Accounts" >
     update db_accounts
-    set create_time = #{createTime,jdbcType=TIMESTAMP}
+    set create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

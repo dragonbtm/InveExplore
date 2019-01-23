@@ -1,204 +1,82 @@
 package com.chain.modules.app.entity;
 
-import java.util.Date;
+import java.math.BigDecimal;
 
 public class Transactions {
-    private String id;
+    private BigDecimal id;
 
-    private Date creationDate;
+    private String fromaddress;
 
-    private Long amount;
+    private String toaddress;
 
-    private Long fee;
+    private String hash;
 
-    private Long amountPoint;
-
-    private Long feePoint;
-
-    private String addressfrom;
-
-    private String addressto;
-
-    private Integer type;
-
-    private Integer stype;
-
-    private Integer etype;
-
-    private Double percent;
-
-    private Short sconfirm;
-
-    private Short econfirm;
-
-    private Short sstatu;
-
-    private Short estatu;
-
-    private String result;
-
-    private String remark;
-
-    private String shash;
+    private String type;
 
     private String ehash;
 
-    private String sinfo;
+    private Long isvalid;
 
-    private String einfo;
+    private Long updatetime;
 
-    private String multihash;
+    private String snapshot;
 
-    public String getId() {
+
+    public Transactions() {
+    }
+
+    private Transactions(Builder builder) {
+        setId(builder.id);
+        setFromaddress(builder.fromaddress);
+        setToaddress(builder.toaddress);
+        setHash(builder.hash);
+        setType(builder.type);
+        setEhash(builder.ehash);
+        setIsvalid(builder.isvalid);
+        setUpdatetime(builder.updatetime);
+        setSnapshot(builder.snapshot);
+    }
+
+    public BigDecimal getId() {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id == null ? null : id.trim();
+
+
+    public void setId(BigDecimal id) {
+        this.id = id;
     }
 
-    public Date getCreationDate() {
-        return creationDate;
+    public String getFromaddress() {
+        return fromaddress;
     }
 
-    public void setCreationDate(Date creationDate) {
-        this.creationDate = creationDate;
+    public void setFromaddress(String fromaddress) {
+        this.fromaddress = fromaddress == null ? null : fromaddress.trim();
     }
 
-    public Long getAmount() {
-        return amount;
+    public String getToaddress() {
+        return toaddress;
     }
 
-    public void setAmount(Long amount) {
-        this.amount = amount;
+    public void setToaddress(String toaddress) {
+        this.toaddress = toaddress == null ? null : toaddress.trim();
     }
 
-    public Long getFee() {
-        return fee;
+    public String getHash() {
+        return hash;
     }
 
-    public void setFee(Long fee) {
-        this.fee = fee;
+    public void setHash(String hash) {
+        this.hash = hash == null ? null : hash.trim();
     }
 
-    public Long getAmountPoint() {
-        return amountPoint;
-    }
-
-    public void setAmountPoint(Long amountPoint) {
-        this.amountPoint = amountPoint;
-    }
-
-    public Long getFeePoint() {
-        return feePoint;
-    }
-
-    public void setFeePoint(Long feePoint) {
-        this.feePoint = feePoint;
-    }
-
-    public String getAddressfrom() {
-        return addressfrom;
-    }
-
-    public void setAddressfrom(String addressfrom) {
-        this.addressfrom = addressfrom == null ? null : addressfrom.trim();
-    }
-
-    public String getAddressto() {
-        return addressto;
-    }
-
-    public void setAddressto(String addressto) {
-        this.addressto = addressto == null ? null : addressto.trim();
-    }
-
-    public Integer getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(Integer type) {
-        this.type = type;
-    }
-
-    public Integer getStype() {
-        return stype;
-    }
-
-    public void setStype(Integer stype) {
-        this.stype = stype;
-    }
-
-    public Integer getEtype() {
-        return etype;
-    }
-
-    public void setEtype(Integer etype) {
-        this.etype = etype;
-    }
-
-    public Double getPercent() {
-        return percent;
-    }
-
-    public void setPercent(Double percent) {
-        this.percent = percent;
-    }
-
-    public Short getSconfirm() {
-        return sconfirm;
-    }
-
-    public void setSconfirm(Short sconfirm) {
-        this.sconfirm = sconfirm;
-    }
-
-    public Short getEconfirm() {
-        return econfirm;
-    }
-
-    public void setEconfirm(Short econfirm) {
-        this.econfirm = econfirm;
-    }
-
-    public Short getSstatu() {
-        return sstatu;
-    }
-
-    public void setSstatu(Short sstatu) {
-        this.sstatu = sstatu;
-    }
-
-    public Short getEstatu() {
-        return estatu;
-    }
-
-    public void setEstatu(Short estatu) {
-        this.estatu = estatu;
-    }
-
-    public String getResult() {
-        return result;
-    }
-
-    public void setResult(String result) {
-        this.result = result == null ? null : result.trim();
-    }
-
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark == null ? null : remark.trim();
-    }
-
-    public String getShash() {
-        return shash;
-    }
-
-    public void setShash(String shash) {
-        this.shash = shash == null ? null : shash.trim();
+    public void setType(String type) {
+        this.type = type == null ? null : type.trim();
     }
 
     public String getEhash() {
@@ -209,27 +87,91 @@ public class Transactions {
         this.ehash = ehash == null ? null : ehash.trim();
     }
 
-    public String getSinfo() {
-        return sinfo;
+    public Long getIsvalid() {
+        return isvalid;
     }
 
-    public void setSinfo(String sinfo) {
-        this.sinfo = sinfo == null ? null : sinfo.trim();
+    public void setIsvalid(Long isvalid) {
+        this.isvalid = isvalid;
     }
 
-    public String getEinfo() {
-        return einfo;
+    public Long getUpdatetime() {
+        return updatetime;
     }
 
-    public void setEinfo(String einfo) {
-        this.einfo = einfo == null ? null : einfo.trim();
+    public void setUpdatetime(Long updatetime) {
+        this.updatetime = updatetime;
     }
 
-    public String getMultihash() {
-        return multihash;
+    public String getSnapshot() {
+        return snapshot;
     }
 
-    public void setMultihash(String multihash) {
-        this.multihash = multihash == null ? null : multihash.trim();
+    public void setSnapshot(String snapshot) {
+        this.snapshot = snapshot == null ? null : snapshot.trim();
+    }
+
+    public static final class Builder {
+        private BigDecimal id;
+        private String fromaddress;
+        private String toaddress;
+        private String hash;
+        private String type;
+        private String ehash;
+        private Long isvalid;
+        private Long updatetime;
+        private String snapshot;
+
+        public Builder() {
+        }
+
+        public Builder id(BigDecimal val) {
+            id = val;
+            return this;
+        }
+
+        public Builder fromaddress(String val) {
+            fromaddress = val;
+            return this;
+        }
+
+        public Builder toaddress(String val) {
+            toaddress = val;
+            return this;
+        }
+
+        public Builder hash(String val) {
+            hash = val;
+            return this;
+        }
+
+        public Builder type(String val) {
+            type = val;
+            return this;
+        }
+
+        public Builder ehash(String val) {
+            ehash = val;
+            return this;
+        }
+
+        public Builder isvalid(Long val) {
+            isvalid = val;
+            return this;
+        }
+
+        public Builder updatetime(Long val) {
+            updatetime = val;
+            return this;
+        }
+
+        public Builder snapshot(String val) {
+            snapshot = val;
+            return this;
+        }
+
+        public Transactions build() {
+            return new Transactions(this);
+        }
     }
 }

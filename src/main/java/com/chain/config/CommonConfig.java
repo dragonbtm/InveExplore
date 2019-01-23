@@ -11,7 +11,13 @@ import javax.validation.Valid;
 @PropertySource(value = {"classpath:application.yml"}, ignoreResourceNotFound = true)
 public class CommonConfig {
 
-	public static String NODENO = "ps13452aw";
+	//rocksDB
+    public static final Integer DBNUMBER = 0;
+    //用户数量
+	public static final String ACCOUNTNUMBER = "account";
+
+
+    public static String NODENO = "ps13452aw";
 
 	public static int SLEEP_TIME = 1000;
 

@@ -6,8 +6,10 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.google.gson.Gson;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 
 /**
  * @Author: zz
@@ -29,34 +31,22 @@ public class JsonUtil {
      * @throws IOException 异常
      */
     public static String toJson(Object obj) throws IOException {
-        return objectMapper.writeValueAsString(obj);
+        return new Gson().toJson(obj);
     }
 
     /**
      * 将json字符串反序列化成对象
      *
      * @param json      json字符串
-     * @param valueType 对象类型
+     * @param typeOfT   对象类型
      * @param <T>       对象类型
      * @return 对象
      * @throws IOException 异常
      */
-    public static <T> T fromJson(String json, Class<T> valueType) throws IOException {
-        return objectMapper.readValue(json, valueType);
+    public static <T> T fromJson(String json, Type typeOfT)  throws IOException {
+        return new Gson().fromJson(json,typeOfT);
     }
 
-    /**
-     * 将json字符串反序列化成对象
-     *
-     * @param json json json字符串
-     * @param ref  对象类型
-     * @param <T>  对象类型
-     * @return 对象
-     * @throws IOException 异常
-     */
-    public static <T> T fromJson(String json, TypeReference<T> ref) throws IOException {
-        return objectMapper.readValue(json, ref);
-    }
 
 
     /**

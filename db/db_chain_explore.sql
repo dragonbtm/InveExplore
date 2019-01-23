@@ -17,8 +17,6 @@ alter table db_accounts comment '账户数量';
 
 
 
-
-
 drop table if exists db_messages;
 /*==============================================================*/
 /* Table: db_messages      --节点信息表                                     */
@@ -43,53 +41,39 @@ drop table if exists db_transactions_index;
 /*==============================================================*/
 /* Table: db_transactions_index         --交易历史索引                         */
 /*==============================================================*/
-create table db_transactions_index
-(
-   id                   bigint not null,
-   tableIndex           int,
-   offsets              int,
-   create_time          datetime,
-   update_time          datetime,
-   primary key (id)
-);
+CREATE TABLE `db_transactions_index` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tableIndex` int(11) DEFAULT NULL,
+  `offsets` int(11) DEFAULT NULL,
+  `create_time` datetime DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+)
+ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='交易记录索引';
+
 alter table db_transactions_index comment '交易记录索引';
 
 
 
-drop table if exists db_transactions;
+drop table if exists db_transaction_0;
 
 /*==============================================================*/
 /* Table: db_transactions         交易历史数据                               */
 /*==============================================================*/
-create table db_transactions
-(
-   id                   CHAR not null,
-   creation_date        timestamp not null default CURRENT_TIMESTAMP,
-   amount               bigint not null,
-   fee                  bigint not null default 0,
-   amount_point         bigint default 0,
-   fee_point            bigint default 0,
-   addressFrom          CHAR,
-   addressTo            CHAR,
-   result               text not null ,
-   remark               text,
-   type                 INT not null default 0,
-   sType                int default 0,
-   eType                int default 0,
-   percent              double,
-   sHash                text,
-   eHash                text,
-   sConfirm             smallint,
-   eConfirm             smallint,
-   sStatu               smallint,
-   eStatu               smallint,
-   sInfo                text,
-   eInfo                text,
-   multiHash            text,
-   primary key (id)
-);
+CREATE TABLE `db_transaction_0` (
+  `id` decimal(65,0) NOT NULL,
+  `fromAddress` varchar(600) DEFAULT NULL,
+  `toAddress` varchar(600) DEFAULT NULL,
+  `hash` varchar(600) DEFAULT NULL,
+  `type` varchar(100) DEFAULT NULL,
+  `eHash` varchar(600) DEFAULT NULL,
+  `isValid` bigint(20) DEFAULT NULL,
+  `updateTime` bigint(20) DEFAULT NULL,
+  `snapshot` varchar(200) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-alter table db_transactions comment '交易历史记录';
+alter table db_transaction_0 comment '历史记录';
 
 
 

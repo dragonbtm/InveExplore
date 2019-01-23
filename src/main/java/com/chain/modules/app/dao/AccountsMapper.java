@@ -2,6 +2,9 @@ package com.chain.modules.app.dao;
 
 import com.chain.modules.app.entity.Accounts;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
+
+import java.util.Date;
 
 @Mapper
 public interface AccountsMapper {
@@ -18,4 +21,8 @@ public interface AccountsMapper {
     int updateByPrimaryKeyWithBLOBs(Accounts record);
 
     int updateByPrimaryKey(Accounts record);
+
+
+    @Select("SELECT * FROM db_accounts acc WHERE acc.create_time = #{date,jdbcType=TIMESTAMP}")
+    Accounts selectByDate(Date date);
 }
