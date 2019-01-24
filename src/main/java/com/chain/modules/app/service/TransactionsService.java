@@ -1,10 +1,10 @@
 package com.chain.modules.app.service;
 
-import com.chain.common.utils.PageUtils;
 
 import java.util.List;
 import java.util.Map;
 
+import com.chain.common.utils.R;
 import com.chain.modules.app.entity.Transactions;
 
 /**
@@ -15,7 +15,7 @@ import com.chain.modules.app.entity.Transactions;
  */
 public interface TransactionsService {
 
-    PageUtils getList(Map<String,Object> map);
+    R getList(Map<String,Object> map);
 
     void requestTransactions();
 

@@ -30,8 +30,7 @@ public class NodeController {
     private TransactionsService transactionsService;
 
 
-
-    @GetMapping("/preview")
+    @PostMapping("/preview")
     @ApiOperation("全网预览")
     public R preview() {
 
@@ -40,13 +39,11 @@ public class NodeController {
     }
 
 
-    @GetMapping("/messageslist")
+    @PostMapping("/messageslist")
     @ApiOperation("消息列表")
     public R messagesList(@RequestParam Map<String,Object> map) {
-        PageUtils pageUtils = transactionsService.getList(map);
-        return R.ok().put("page",pageUtils);
+        return transactionsService.getList(map);
     }
-
 
 
     @PostMapping("/messagesinfo")
@@ -61,12 +58,10 @@ public class NodeController {
         }else {
             return R.error("param is wrong~!");
         }
-
     }
 
 
-
-    @GetMapping("/graphdatas")
+    @PostMapping("/graphdatas")
     @ApiOperation("图表数据")
     public R graphdatas() {
         return messagesService.getGraphdDtas();

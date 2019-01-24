@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.chain.modules.app.dao.TransactionsMapper" >
   <resultMap id="BaseResultMap" type="com.chain.modules.app.entity.Transactions" >
-    <id column="id" property="id" jdbcType="DECIMAL" />
+    <id column="id" property="id" jdbcType="BIGINT" />
     <result column="fromAddress" property="fromaddress" jdbcType="VARCHAR" />
     <result column="toAddress" property="toaddress" jdbcType="VARCHAR" />
     <result column="hash" property="hash" jdbcType="VARCHAR" />
@@ -28,18 +28,18 @@
     select 
     <include refid="Base_Column_List" />
     from db_transaction_0
-    where id = #{id,jdbcType=DECIMAL}
+    where id = #{id,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.math.BigDecimal" >
     delete from db_transaction_0
-    where id = #{id,jdbcType=DECIMAL}
+    where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.chain.modules.app.entity.Transactions" >
     insert into db_transaction_0 (id, fromAddress, toAddress, 
       hash, type, eHash, 
       isValid, updateTime, snapshot
       )
-    values (#{id,jdbcType=DECIMAL}, #{fromaddress,jdbcType=VARCHAR}, #{toaddress,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=BIGINT}, #{fromaddress,jdbcType=VARCHAR}, #{toaddress,jdbcType=VARCHAR},
       #{hash,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{ehash,jdbcType=VARCHAR}, 
       #{isvalid,jdbcType=BIGINT}, #{updatetime,jdbcType=BIGINT}, #{snapshot,jdbcType=VARCHAR}
       )
@@ -77,7 +77,7 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
-        #{id,jdbcType=DECIMAL},
+        #{id,jdbcType=BIGINT},
       </if>
       <if test="fromaddress != null" >
         #{fromaddress,jdbcType=VARCHAR},
@@ -133,7 +133,7 @@
         snapshot = #{snapshot,jdbcType=VARCHAR},
       </if>
     </set>
-    where id = #{id,jdbcType=DECIMAL}
+    where id = #{id,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.chain.modules.app.entity.Transactions" >
     update db_transaction_0
@@ -145,7 +145,7 @@
       isValid = #{isvalid,jdbcType=BIGINT},
       updateTime = #{updatetime,jdbcType=BIGINT},
       snapshot = #{snapshot,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=DECIMAL}
+    where id = #{id,jdbcType=BIGINT}
   </update>
   <select id="selectMessageTotal" parameterType="com.chain.modules.app.entity.Transactions"  resultType="integer">
     SELECT  COUNT(0) FROM db_transaction_0

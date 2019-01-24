@@ -3,9 +3,11 @@ package com.chain.modules.app.entity;
 import com.baomidou.mybatisplus.annotations.TableName;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
+
 @TableName("db_transaction_0")
 public class Transactions {
-    private BigDecimal id;
+    private BigInteger id;
 
     private String fromaddress;
 
@@ -39,13 +41,11 @@ public class Transactions {
         setSnapshot(builder.snapshot);
     }
 
-    public BigDecimal getId() {
+    public BigInteger getId() {
         return id;
     }
 
-
-
-    public void setId(BigDecimal id) {
+    public void setId(BigInteger id) {
         this.id = id;
     }
 
@@ -54,7 +54,7 @@ public class Transactions {
     }
 
     public void setFromaddress(String fromaddress) {
-        this.fromaddress = fromaddress == null ? null : fromaddress.trim();
+        this.fromaddress = fromaddress;
     }
 
     public String getToaddress() {
@@ -62,7 +62,7 @@ public class Transactions {
     }
 
     public void setToaddress(String toaddress) {
-        this.toaddress = toaddress == null ? null : toaddress.trim();
+        this.toaddress = toaddress;
     }
 
     public String getHash() {
@@ -70,7 +70,7 @@ public class Transactions {
     }
 
     public void setHash(String hash) {
-        this.hash = hash == null ? null : hash.trim();
+        this.hash = hash;
     }
 
     public String getType() {
@@ -78,7 +78,7 @@ public class Transactions {
     }
 
     public void setType(String type) {
-        this.type = type == null ? null : type.trim();
+        this.type = type;
     }
 
     public String getEhash() {
@@ -86,7 +86,7 @@ public class Transactions {
     }
 
     public void setEhash(String ehash) {
-        this.ehash = ehash == null ? null : ehash.trim();
+        this.ehash = ehash;
     }
 
     public Long getIsvalid() {
@@ -110,11 +110,11 @@ public class Transactions {
     }
 
     public void setSnapshot(String snapshot) {
-        this.snapshot = snapshot == null ? null : snapshot.trim();
+        this.snapshot = snapshot;
     }
 
     public static final class Builder {
-        private BigDecimal id;
+        private BigInteger id;
         private String fromaddress;
         private String toaddress;
         private String hash;
@@ -127,7 +127,7 @@ public class Transactions {
         public Builder() {
         }
 
-        public Builder id(BigDecimal val) {
+        public Builder id(BigInteger val) {
             id = val;
             return this;
         }

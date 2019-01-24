@@ -5,7 +5,6 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
-import com.baomidou.mybatisplus.service.IService;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.chain.common.utils.*;
 import com.chain.config.CommonConfig;
@@ -110,7 +109,7 @@ public class TransactionsServiceImpl extends ServiceImpl<TransactionsMapper,Tran
                             .hash(trans.getString("hash"))
                             .fromaddress(fromaddress)
                             .toaddress(toaddress)
-                            .id(trans.getBigDecimal("id"))
+                            .id(trans.getBigInteger("id"))
                             .isvalid(trans.getBoolean("isValid")?1L:0L)
                             .snapshot(trans.getString("snapshot"))
                             .type(trans.getString("type"))
@@ -145,13 +144,9 @@ public class TransactionsServiceImpl extends ServiceImpl<TransactionsMapper,Tran
                             .build();
                     accountsMapper.insertSelective(accs);
                 }
-
-
             }else {
                 log.error("coode is not 200");
             }
-
-
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
             log.error("getMessages error ~!" ,e);
@@ -171,18 +166,31 @@ public class TransactionsServiceImpl extends ServiceImpl<TransactionsMapper,Tran
 
 
     @Override
-    public PageUtils getList(@RequestParam Map<String, Object> map) {
+    public R getList(@RequestParam Map<String, Object> map) {
         String typeId = (String) map.get("typeId");
         EntityWrapper<Transactions> et = new EntityWrapper<Transactions>();
-        if(typeId!=null&&typeId!=""){
+        if(!StringUtils.isNull(typeId)){
             et.eq("type",typeId);
         }
-        Page<Transactions> page = this.selectPage(
-                new Query<Transactions>(map).getPage(),
+        Page page = this.selectPage(
+                new Query(map).getPage(),
                 et
         );
 
-        return new PageUtils(page);
+        RocksJavaUtil rocksDb = new RocksJavaUtil(CommonConfig.DBNUMBER);
+        List list = new ArrayList();
+        for (Object tran : page.getRecords()) {
+            String data = new String(rocksDb.get(((Transactions)tran).getHash()));
+            try {
+                list.add(JSON.parseObject(data));
+            } catch (Exception e) {
+                e.printStackTrace();
+                log.error("json数据处理异常",e);
+                return R.error("json数据处理异常");
+            }
+        }
+        page.setRecords(list);
+        return R.ok().put("page",new PageUtils(page));
     }
 
     @Override
