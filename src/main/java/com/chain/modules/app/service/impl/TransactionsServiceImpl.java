@@ -92,8 +92,12 @@ public class TransactionsServiceImpl extends ServiceImpl<TransactionsMapper,Tran
                 RocksJavaUtil rocks  = new RocksJavaUtil(CommonConfig.DBNUMBER);
 
                 byte[] arr = rocks.get(CommonConfig.ACCOUNTNUMBER);
-
                 Set<String> accounts = new HashSet<>();
+                if(arr != null) {
+                    accounts = JsonUtil.fromJson(new String(arr),new TypeToken<HashSet<String>>(){}.getType());
+                }
+
+
 
                 for(int i = 0 ; i < list.size(); i++){
                     JSONObject trans = list.getJSONObject(i);
@@ -115,22 +119,18 @@ public class TransactionsServiceImpl extends ServiceImpl<TransactionsMapper,Tran
                     rocks.put(trans.getString("hash"),trans.toJSONString());
 
                     //统计地址
-                    if(arr != null) {
-                        accounts = JsonUtil.fromJson(new String(arr),new TypeToken<HashSet<String>>(){}.getType());
-                        accounts.add(fromaddress);
-                        accounts.add(toaddress);
-                    }else {
-                        accounts.add(fromaddress);
-                        accounts.add(toaddress);
-                    }
+                    accounts.add(fromaddress);
+                    accounts.add(toaddress);
+
                 }
                 //更新索引
                 index.setOffsets(offset);
                 index.setTableindex(tableIndex);
                 transactionsIndexMapper.updateByPrimaryKey(index);
 
-
+                //将地址 集合 放入缓存
                 rocks.put(CommonConfig.ACCOUNTNUMBER,JsonUtil.toJson(accounts));
+
                 Date date = DateUtils.stringToDate(DateUtils.format(new Date(), "yyyy-MM-dd"),"yyyy-MM-dd");
                 Accounts accs = accountsMapper.selectByDate(date);
                 if(accs != null) {
