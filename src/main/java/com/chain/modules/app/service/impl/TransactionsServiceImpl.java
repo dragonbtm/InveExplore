@@ -80,6 +80,7 @@ public class TransactionsServiceImpl extends ServiceImpl<TransactionsMapper,Tran
         params.put("tableIndex",tableIndex + "");
         params.put("offset",offset + "");
         try {
+            log.info("请求历史数据->" + url);
             String responseBody = HttpUtils.httpPost(url,params);
             JSONObject result = JSON.parseObject(responseBody);
             int code = result.getInteger("code");
@@ -171,8 +172,8 @@ public class TransactionsServiceImpl extends ServiceImpl<TransactionsMapper,Tran
 
     @Override
     public PageUtils getList(@RequestParam Map<String, Object> map) {
-        String typeId= (String) map.get("typeId");
-        EntityWrapper<Transactions> et=new EntityWrapper<Transactions>();
+        String typeId = (String) map.get("typeId");
+        EntityWrapper<Transactions> et = new EntityWrapper<Transactions>();
         if(typeId!=null&&typeId!=""){
             et.eq("type",typeId);
         }
@@ -188,5 +189,15 @@ public class TransactionsServiceImpl extends ServiceImpl<TransactionsMapper,Tran
     public Transactions getTransactionByHash(String hash) {
 
         return transactionsMapper.selectByHash(hash);
+    }
+
+    @Override
+    public List<Transactions> selectByAddress(Map<String,Object> params) {
+        return transactionsMapper.selectByAddress(params);
+    }
+
+    @Override
+    public int selectMessageTotal() {
+        return transactionsMapper.selectMessageTotal();
     }
 }

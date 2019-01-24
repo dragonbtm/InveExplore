@@ -2,6 +2,7 @@ package com.chain.modules.app.service;
 
 import com.chain.common.utils.PageUtils;
 
+import java.util.List;
 import java.util.Map;
 
 import com.chain.modules.app.entity.Transactions;
@@ -19,4 +20,8 @@ public interface TransactionsService {
     void requestTransactions();
 
     Transactions getTransactionByHash(String hash);
+
+    List<Transactions> selectByAddress(Map<String,Object> params);
+
+    int selectMessageTotal();
 }

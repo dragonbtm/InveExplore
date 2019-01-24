@@ -6,6 +6,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface TransactionsMapper extends BaseMapper<Transactions> {
@@ -25,4 +27,6 @@ public interface TransactionsMapper extends BaseMapper<Transactions> {
 
     @Select("SELECT * FROM db_transaction_0 WHERE hash = #{hash}")
     Transactions selectByHash(String hash);
+
+    List<Transactions> selectByAddress(Map<String,Object> params);
 }

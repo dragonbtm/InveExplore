@@ -2,11 +2,7 @@ package com.chain.modules.app.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.chain.common.utils.DateUtils;
-import com.chain.common.utils.HttpUtils;
-import com.chain.common.utils.JsonUtil;
-import com.chain.common.utils.R;
+import com.chain.common.utils.*;
 import com.chain.config.CommonConfig;
 import com.chain.modules.app.dao.AccountsMapper;
 import com.chain.modules.app.dao.MessagesMapper;
@@ -15,7 +11,6 @@ import com.chain.modules.app.entity.Accounts;
 import com.chain.modules.app.entity.Messages;
 import com.chain.modules.app.entity.Transactions;
 import com.chain.modules.app.rocksDB.RocksJavaUtil;
-import com.chain.modules.app.service.AccountsService;
 import com.chain.modules.app.service.MessagesService;
 import com.chain.modules.app.service.TransactionsService;
 import org.slf4j.Logger;
@@ -45,13 +40,16 @@ public class MessagesServiceImpl implements MessagesService {
 
     @Resource
     private MessagesMapper messagesMapper;
-    @Resource
-    private TransactionsMapper transactionsMapper;
+
     @Resource
     private AccountsMapper accountsMapper;
 
     @Resource
+    private TransactionsMapper transactionsMapper;
+
+    @Resource
     private TransactionsService transactionsService;
+
 
 
     /**
@@ -115,14 +113,13 @@ public class MessagesServiceImpl implements MessagesService {
 
     @Override
     public  Map<String,Object> selectByNull() {
-
         Date date = DateUtils.stringToDate(DateUtils.format(new Date(), "yyyy-MM-dd"),"yyyy-MM-dd");
         Messages messages = messagesMapper.selectByCreateTime(date);
         Map<String,Object> map=new HashMap<String,Object>();
         map.put("messages",messages);
-        int messageTotal=transactionsMapper.selectMessageTotal();
+        int messageTotal = transactionsService.selectMessageTotal();
         map.put("messageTotal",messageTotal);
-        Accounts accounts =accountsMapper.selectByDate(date);
+        Accounts accounts = accountsMapper.selectByDate(date);
         map.put("accountsTotal",accounts.getNumber());
         return map;
 
@@ -130,7 +127,7 @@ public class MessagesServiceImpl implements MessagesService {
     }
 
     /**
-     *
+     *  获取折线图数据
      * @return
      */
     @Override
@@ -154,8 +151,13 @@ public class MessagesServiceImpl implements MessagesService {
         return R.ok().put("messages",messages).put("accounts",accounts);
     }
 
+    /**
+     * 根据hash获取交易
+     * @param hash
+     * @return
+     */
     @Override
-    public R getTransactionInfo(String hash) {
+    public R getTransactionInfoByHash(String hash) {
         RocksJavaUtil rocksDb = new RocksJavaUtil(CommonConfig.DBNUMBER);
         byte[] d = rocksDb.get(hash);
         if(d != null) {
@@ -164,5 +166,19 @@ public class MessagesServiceImpl implements MessagesService {
         }else {
             return R.error("the hash not exist");
         }
+    }
+
+    /**
+     * 根据地址获取交易列表
+     * @param params
+     * @return
+     */
+    @Override
+    public R getTransactionsByAddress(Map<String,Object> params) {
+        Map<String,Object> map = new Query<>(params);
+        List<Transactions> list = transactionsMapper.selectByAddress(map);
+        PageUtils page = new PageUtils(list,list.size(),((Query) map).getLimit(),((Query) map).getCurrPage());
+        return R.ok().put("page",page);
+
     }
 }

@@ -1,6 +1,5 @@
 package com.chain.modules.app.service;
 
-import com.chain.modules.app.entity.Messages;
 
 import java.util.Map;
 
@@ -13,10 +12,14 @@ import com.chain.common.utils.R;
  * @Modified By
  */
 public interface MessagesService {
+
     void getMessages();
+
     Map<String,Object> selectByNull();
 
     R getGraphdDtas();
 
-    R getTransactionInfo(String hash);
+    R getTransactionInfoByHash(String hash);
+
+    R getTransactionsByAddress(Map<String,Object> map);
 }

@@ -15,6 +15,15 @@
   <sql id="Base_Column_List" >
     id, fromAddress, toAddress, hash, type, eHash, isValid, updateTime, snapshot
   </sql>
+
+  <select id="selectByAddress" resultMap="BaseResultMap"  parameterType="java.util.Map">
+        SELECT * FROM db_transaction_0 t
+        WHERE t.fromAddress = #{address,jdbcType=VARCHAR}
+        OR t.toAddress = #{address,jdbcType=VARCHAR}
+        LIMIT #{offset,jdbcType=BIGINT},#{limit,jdbcType=BIGINT}
+    </select>
+
+
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.math.BigDecimal" >
     select 
     <include refid="Base_Column_List" />
