@@ -200,7 +200,7 @@ public class TransactionsServiceImpl extends ServiceImpl<TransactionsMapper,Tran
     }
 
     @Override
-    public List<Transactions> selectByAddress(Map<String,Object> params) {
+    public List<Object> selectByAddress(Map<String,Object> params) {
         return transactionsMapper.selectByAddress(params);
     }
 

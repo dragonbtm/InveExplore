@@ -19,13 +19,12 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.List;
+import java.util.*;
 
 /**
  * @Author: zz
@@ -175,10 +174,57 @@ public class MessagesServiceImpl implements MessagesService {
      */
     @Override
     public R getTransactionsByAddress(Map<String,Object> params) {
-        Map<String,Object> map = new Query<>(params);
-        List<Transactions> list = transactionsMapper.selectByAddress(map);
-        PageUtils page = new PageUtils(list,list.size(),((Query) map).getLimit(),((Query) map).getCurrPage());
-        return R.ok().put("page",page);
+        Query map = new Query<>(params);
+        String address = (String) params.get("address");
+        Integer msgTotal = transactionsMapper.selectMessageTotalByAddress(address);
+        List<Object> list = transactionsMapper.selectByAddress(map);
+
+        if(address.length() != 32) {
+            return R.error(500,"wrong address");
+        }
+        if(list.size() == 0) {
+            return R.error(500,"wrong address");
+        }
+
+
+        List<JSONObject> tranList = new ArrayList<>();
+
+        BigDecimal total = BigDecimal.ZERO;
+        BigDecimal in =  BigDecimal.ZERO;
+        BigDecimal out =  BigDecimal.ZERO;
+
+        for(Object tran : list) {
+            RocksJavaUtil rocksDb = new RocksJavaUtil(CommonConfig.DBNUMBER);
+            String hash = ((Transactions) tran).getHash();
+            JSONObject tranObj = JSON.parseObject(new String(rocksDb.get(hash)));
+            String fromAddress = tranObj.getString("fromAddress");
+            String toAddress = tranObj.getString("toAddress");
+            BigDecimal amount = tranObj.getBigDecimal("amount");
+            BigDecimal free = tranObj.getBigDecimal("free");
+            Integer type = tranObj.getInteger("type");
+            boolean isValid = tranObj.getBoolean("isValid");
+            boolean isStable = tranObj.getBoolean("isStable");
+
+            tranList.add(tranObj);
+            if(type == 1) {
+                if(isValid && isStable) {
+                    if(address.equals(toAddress)) {
+                        in = in.add(amount);
+                    }else {
+                        out = out.add(amount);
+                        out = out.add(free);
+                    }
+                }
+            }
+        }
+
+
+        total = in.subtract(out);
+
+
+
+        PageUtils page = new PageUtils(tranList,tranList.size(),map.getLimit(),map.getCurrPage());
+        return R.ok().put("page",page).put("total",total).put("address",address).put("msgTotal",msgTotal);
 
     }
 }

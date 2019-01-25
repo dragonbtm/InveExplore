@@ -21,7 +21,7 @@ public interface TransactionsService {
 
     Transactions getTransactionByHash(String hash);
 
-    List<Transactions> selectByAddress(Map<String,Object> params);
+    List<Object> selectByAddress(Map<String,Object> params);
 
     int selectMessageTotal();
 }

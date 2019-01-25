@@ -28,5 +28,8 @@ public interface TransactionsMapper extends BaseMapper<Transactions> {
     @Select("SELECT * FROM db_transaction_0 WHERE hash = #{hash}")
     Transactions selectByHash(String hash);
 
-    List<Transactions> selectByAddress(Map<String,Object> params);
+    List<Object> selectByAddress(Map<String,Object> params);
+
+    @Select("SELECT count(1) FROM db_transaction_0 WHERE fromAddress = #{address} or toAddress = #{address}")
+    Integer selectMessageTotalByAddress(String address);
 }
