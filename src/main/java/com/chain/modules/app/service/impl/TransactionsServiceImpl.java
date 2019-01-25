@@ -167,7 +167,7 @@ public class TransactionsServiceImpl extends ServiceImpl<TransactionsMapper,Tran
 
     @Override
     public R getList(@RequestParam Map<String, Object> map) {
-        String typeId = (String) map.get("typeId");
+        String typeId = (String) map.get("type");
         EntityWrapper<Transactions> et = new EntityWrapper<Transactions>();
         if(!StringUtils.isNull(typeId)){
             et.eq("type",typeId);

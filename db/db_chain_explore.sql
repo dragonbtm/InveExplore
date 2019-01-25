@@ -4,14 +4,14 @@ drop table if exists db_accounts;
 /*==============================================================*/
 /* Table: db_accounts  --账户总数                                      */
 /*==============================================================*/
-create table db_accounts
-(
-   id                   bigint not null auto_increment,
-   number               varbinary(200) comment '账户数量',
-   create_time          timestamp,
-   update_time          timestamp,
-   primary key (id)
-);
+CREATE TABLE `db_accounts` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `number` varchar(200) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '账户数量',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `update_time` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8 COMMENT='账户数量';
+
 
 alter table db_accounts comment '账户数量';
 
@@ -21,17 +21,16 @@ drop table if exists db_messages;
 /*==============================================================*/
 /* Table: db_messages      --节点信息表                                     */
 /*==============================================================*/
-create table db_messages
-(
-   id                   bigint not null auto_increment,
-   runTime              varchar(40),
-   shardNumber          varchar(10),
-   tps                  varchar(30),
-   userCount            bigint,
-   create_time          datetime,
-   update_time          datetime,
-   primary key (id)
-);
+CREATE TABLE `db_messages` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `runTime` varchar(40) DEFAULT NULL,
+  `shardNumber` varchar(10) DEFAULT NULL,
+  `tps` varchar(30) DEFAULT NULL,
+  `userCount` bigint(20) DEFAULT NULL,
+  `create_time` datetime DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COMMENT='节点数据信息';
 alter table db_messages comment '节点数据信息';
 
 
@@ -48,10 +47,7 @@ CREATE TABLE `db_transactions_index` (
   `create_time` datetime DEFAULT NULL,
   `update_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-)
-ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='交易记录索引';
-
-alter table db_transactions_index comment '交易记录索引';
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8 COMMENT='交易记录索引';
 
 
 
@@ -61,7 +57,7 @@ drop table if exists db_transaction_0;
 /* Table: db_transactions         交易历史数据                               */
 /*==============================================================*/
 CREATE TABLE `db_transaction_0` (
-  `id` decimal(65,0) NOT NULL,
+  `id` bigint(255) NOT NULL,
   `fromAddress` varchar(600) DEFAULT NULL,
   `toAddress` varchar(600) DEFAULT NULL,
   `hash` varchar(600) DEFAULT NULL,
@@ -71,9 +67,8 @@ CREATE TABLE `db_transaction_0` (
   `updateTime` bigint(20) DEFAULT NULL,
   `snapshot` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='历史记录';
 
-alter table db_transaction_0 comment '历史记录';
 
 
 
