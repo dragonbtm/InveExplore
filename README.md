@@ -25,4 +25,5 @@ renren-fast
 │  ├─mapper SQL对应的XML文件
 │  └─static 静态资源
 
+mysql 5.7.22-log
 ```

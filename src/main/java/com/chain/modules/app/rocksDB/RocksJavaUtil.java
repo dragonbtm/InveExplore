@@ -5,6 +5,7 @@ import org.rocksdb.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,6 +30,8 @@ public class RocksJavaUtil {
             if (rocksDB == null) {
 
                 String rocksDBPath = dbPath + number;
+                File file = new File(rocksDBPath);
+                file.mkdirs();
                 RocksDB.loadLibrary();
 
 
@@ -93,7 +96,7 @@ public class RocksJavaUtil {
     }
 
     public static void main(String[] args) {
-        RocksJavaUtil test = new RocksJavaUtil(50);
+        RocksJavaUtil test = new RocksJavaUtil(0);
 
     }
 
