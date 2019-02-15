@@ -172,6 +172,9 @@ public class TransactionsServiceImpl extends ServiceImpl<TransactionsMapper,Tran
         if(!StringUtils.isNull(typeId)){
             et.eq("type",typeId);
         }
+        List<String> orderBy = new ArrayList<>();
+        orderBy.add("updateTime");
+        et.orderDesc(orderBy);
         Page page = this.selectPage(
                 new Query(map).getPage(),
                 et
