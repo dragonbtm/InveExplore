@@ -11,9 +11,11 @@ server:
 
 # 节点数据接口
 node:
-  url: http://18.191.18.104:31003/v1
+  url: http://34.220.63.1:25003
+  version: /v1
   messages: /getmessageInfo
   transaction: /getmessagelist
+  localfullnodes : /getlocalfullnodes
 
 client:
   ws_protocol: ws://
@@ -22,7 +24,7 @@ client:
 spring:
   # 环境 dev|test|prod
   profiles:
-    active: dev
+    active: prod
   # jackson时间格式化
   jackson:
     time-zone: GMT+8

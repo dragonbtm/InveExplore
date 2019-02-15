@@ -1,9 +1,11 @@
 package com.chain.modules.app.service.impl;
 
+import com.alibaba.druid.support.json.JSONUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.chain.common.utils.*;
 import com.chain.config.CommonConfig;
+import com.chain.config.CommonDataDefine;
 import com.chain.modules.app.dao.AccountsMapper;
 import com.chain.modules.app.dao.MessagesMapper;
 import com.chain.modules.app.dao.TransactionsMapper;
@@ -13,6 +15,7 @@ import com.chain.modules.app.entity.Transactions;
 import com.chain.modules.app.rocksDB.RocksJavaUtil;
 import com.chain.modules.app.service.MessagesService;
 import com.chain.modules.app.service.TransactionsService;
+import com.chain.modules.app.utils.NodeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -55,9 +58,17 @@ public class MessagesServiceImpl implements MessagesService {
      */
     @Override
     public void getMessages() {
-        String url = CommonConfig.getNodeUrl() + CommonConfig.getNodeMessages();
+        String url =  CommonDataDefine.localfullnodeUrl;
+
         Date date = DateUtils.stringToDate(DateUtils.format(new Date(), "yyyy-MM-dd"),"yyyy-MM-dd");
         try {
+            if (StringUtils.isNull(url)) {
+                url = NodeUtils.getLocalfullnode();
+            }
+            url += CommonConfig.getVersion() + CommonConfig.getNodeMessages();
+
+            log.info("请求messages数据->" + url);
+
             String responseBody = HttpUtils.httpPost(url,new HashMap<>());
             JSONObject result = JSON.parseObject(responseBody);
             int code = result.getInteger("code");
@@ -72,6 +83,7 @@ public class MessagesServiceImpl implements MessagesService {
 
                 if(messages != null) {
                     messages = new Messages.Builder()
+                            .id(messages.getId())
                             .runtime(runTime)
                             .shardnumber(shardNumber)
                             .tps(tps)
@@ -106,8 +118,12 @@ public class MessagesServiceImpl implements MessagesService {
         } catch (IOException e) {
             e.printStackTrace();
             log.error("getMessages error ~!" ,e);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("getMessages error ~!" ,e);
         }
     }
+
 
     @Override
     public  Map<String,Object> selectByNull() {
@@ -192,8 +208,10 @@ public class MessagesServiceImpl implements MessagesService {
         BigDecimal in =  BigDecimal.ZERO;
         BigDecimal out =  BigDecimal.ZERO;
 
+        RocksJavaUtil rocksDb = new RocksJavaUtil(CommonConfig.DBNUMBER);
+
         for(Object tran : list) {
-            RocksJavaUtil rocksDb = new RocksJavaUtil(CommonConfig.DBNUMBER);
+
             String hash = ((Transactions) tran).getHash();
             JSONObject tranObj = JSON.parseObject(new String(rocksDb.get(hash)));
             String fromAddress = tranObj.getString("fromAddress");
@@ -211,16 +229,14 @@ public class MessagesServiceImpl implements MessagesService {
                         in = in.add(amount);
                     }else {
                         out = out.add(amount);
-                        out = out.add(free);
+                        out = out.add(free==null?BigDecimal.ZERO:free);
                     }
                 }
             }
         }
-
-
         total = in.subtract(out);
 
-
+        total = new BigDecimal(new String(rocksDb.get(address)));
 
         PageUtils page = new PageUtils(tranList,tranList.size(),map.getLimit(),map.getCurrPage());
         return R.ok().put("page",page).put("total",total).put("address",address).put("msgTotal",msgTotal);

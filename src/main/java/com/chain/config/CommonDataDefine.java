@@ -14,4 +14,8 @@ public class CommonDataDefine {
     public static Map<String, WebSocketClient> wsMgClientMap = new ConcurrentHashMap<>();
 
     public static Map<String, Socket> socketIOClientMap = new ConcurrentHashMap<>();
+
+
+    //储存localfullnode
+    public static String localfullnodeUrl = "";
 }

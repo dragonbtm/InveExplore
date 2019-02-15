@@ -32,16 +32,36 @@ public class CommonConfig {
 
 	//节点数据
 	private static String nodeUrl;
+	private static String version;
 	private static String nodeMessages;
 	private static String nodeTransaction;
+	private static String localfullnodes;
 
+
+	public static String getVersion() {
+		return version;
+	}
+
+	@Value("${node.version}")
+	public void setVersion(String version) {
+		this.version = version;
+	}
+
+	public static String getLocalfullnodes() {
+		return localfullnodes;
+	}
+
+	@Value("${node.localfullnodes}")
+	public void setLocalfullnodes(String localfullnodes) {
+		this.localfullnodes = localfullnodes;
+	}
 
 	public static String getNodeUrl() {
 		return nodeUrl;
 	}
 
 	@Value("${node.url}")
-	public  void setNodeUrl(String nodeUrl) {
+	public void setNodeUrl(String nodeUrl) {
 		this.nodeUrl = nodeUrl;
 	}
 

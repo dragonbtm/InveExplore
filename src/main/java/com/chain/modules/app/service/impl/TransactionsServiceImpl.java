@@ -1,5 +1,6 @@
 package com.chain.modules.app.service.impl;
 
+import com.alibaba.druid.support.json.JSONUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -8,6 +9,7 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.chain.common.utils.*;
 import com.chain.config.CommonConfig;
+import com.chain.config.CommonDataDefine;
 import com.chain.modules.app.dao.AccountsMapper;
 import com.chain.modules.app.dao.TransactionsIndexMapper;
 import com.chain.modules.app.dao.TransactionsMapper;
@@ -16,6 +18,7 @@ import com.chain.modules.app.entity.Transactions;
 import com.chain.modules.app.entity.TransactionsIndex;
 import com.chain.modules.app.rocksDB.RocksJavaUtil;
 import com.chain.modules.app.service.TransactionsService;
+import com.chain.modules.app.utils.NodeUtils;
 import com.google.gson.reflect.TypeToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -59,7 +63,12 @@ public class TransactionsServiceImpl extends ServiceImpl<TransactionsMapper,Tran
         TransactionsIndex index = transactionsIndexMapper.selectAll();
         Integer tableIndex = 0;
         Integer offset = 0;
-        String url = CommonConfig.getNodeUrl() + CommonConfig.getNodeTransaction();
+
+        String seedurl = CommonConfig.getNodeUrl() + CommonConfig.getLocalfullnodes();
+
+        String url =  CommonDataDefine.localfullnodeUrl;
+
+
         HashMap<String,String> params = new HashMap<>();
 
         if(index == null){
@@ -79,6 +88,12 @@ public class TransactionsServiceImpl extends ServiceImpl<TransactionsMapper,Tran
         params.put("tableIndex",tableIndex + "");
         params.put("offset",offset + "");
         try {
+            if (StringUtils.isNull(url)) {
+                url = NodeUtils.getLocalfullnode();
+            }
+
+            url += CommonConfig.getVersion() +CommonConfig.getNodeTransaction();
+
             log.info("请求历史数据->" + url);
             String responseBody = HttpUtils.httpPost(url,params);
             JSONObject result = JSON.parseObject(responseBody);
@@ -97,12 +112,13 @@ public class TransactionsServiceImpl extends ServiceImpl<TransactionsMapper,Tran
                     accounts = JsonUtil.fromJson(new String(arr),new TypeToken<HashSet<String>>(){}.getType());
                 }
 
-
-
                 for(int i = 0 ; i < list.size(); i++){
                     JSONObject trans = list.getJSONObject(i);
                     String fromaddress = trans.getString("fromAddress");
                     String toaddress = trans.getString("toAddress");
+                    BigDecimal amount = trans.getBigDecimal("amount");
+                    BigDecimal free = trans.getBigDecimal("free");
+
 
                     Transactions transactions = new Transactions.Builder()
                             .ehash(trans.getString("eHash"))
@@ -121,6 +137,35 @@ public class TransactionsServiceImpl extends ServiceImpl<TransactionsMapper,Tran
                     //统计地址
                     accounts.add(fromaddress);
                     accounts.add(toaddress);
+
+                    //统计账户总金额
+                    if(!transactions.getType().equals("3")) {
+                        byte[] fromBytes = rocks.get(fromaddress);
+                        byte[] toBytes = rocks.get(toaddress);
+
+                        BigDecimal fromAddressAmount = BigDecimal.ZERO;
+                        BigDecimal toAddressAmount = BigDecimal.ZERO;
+
+                        if(fromBytes != null) {
+                            fromAddressAmount = new BigDecimal(new String(fromBytes));
+                        }
+                        if(toBytes != null) {
+                            toAddressAmount = new BigDecimal(new String(fromBytes));
+                        }
+
+                        if(amount != null) {
+                            fromAddressAmount = fromAddressAmount.subtract(amount);
+                            toAddressAmount = toAddressAmount.add(amount);
+                        }
+                        if(free != null) {
+                            fromAddressAmount = fromAddressAmount.subtract(free);
+                        }
+
+                        rocks.put(fromaddress,fromAddressAmount.toString());
+                        rocks.put(toaddress,toAddressAmount.toString());
+                    }
+
+
 
                 }
                 //更新索引
