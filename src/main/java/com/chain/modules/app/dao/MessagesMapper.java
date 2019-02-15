@@ -30,4 +30,7 @@ public interface MessagesMapper {
             "GROUP BY FROM_UNIXTIME(t.updateTime/1000,'%Y%m%d') \n" +
             "ORDER BY date(FROM_UNIXTIME(t.updateTime/1000,'%Y%m%d')) ASC")
     List<Integer> selectTrans();
+
+    @Select("SELECT * FROM db_messages msg ORDER BY date(create_time) DESC")
+    List<Messages> selectList();
 }

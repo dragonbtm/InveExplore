@@ -1,7 +1,6 @@
 package com.chain.modules.app.dao;
 
 import com.chain.modules.app.entity.Accounts;
-import com.chain.modules.app.entity.Messages;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -34,4 +33,9 @@ public interface AccountsMapper {
         "WHERE DATE(a.create_time) >=DATE_SUB(curdate(),interval 14 day) and DATE(a.create_time) <=  DATE_SUB(CURDATE(),INTERVAL 1 DAY)\n" +
         "ORDER BY date(a.create_time) ASC")
     List<Integer> selectAccs();
+
+    @Select("SELECT number, a.create_time \n" +
+            "FROM db_accounts a   \n" +
+            "ORDER BY date(a.create_time) DESC")
+    List<Accounts> selectList();
 }

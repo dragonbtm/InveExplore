@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -113,13 +112,13 @@ public class MessagesServiceImpl implements MessagesService {
     @Override
     public  Map<String,Object> selectByNull() {
         Date date = DateUtils.stringToDate(DateUtils.format(new Date(), "yyyy-MM-dd"),"yyyy-MM-dd");
-        Messages messages = messagesMapper.selectByCreateTime(date);
+        List<Messages> messages = messagesMapper.selectList();
         Map<String,Object> map=new HashMap<String,Object>();
-        map.put("messages",messages);
+        map.put("messages",messages.get(0));
         int messageTotal = transactionsService.selectMessageTotal();
         map.put("messageTotal",messageTotal);
-        Accounts accounts = accountsMapper.selectByDate(date);
-        map.put("accountsTotal",accounts.getNumber());
+        List<Accounts> accounts = accountsMapper.selectList();
+        map.put("accountsTotal",accounts.get(0).getNumber());
         return map;
 
 
