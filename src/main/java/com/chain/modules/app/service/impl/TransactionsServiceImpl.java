@@ -1,6 +1,5 @@
 package com.chain.modules.app.service.impl;
 
-import com.alibaba.druid.support.json.JSONUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -64,11 +63,7 @@ public class TransactionsServiceImpl extends ServiceImpl<TransactionsMapper,Tran
         Integer tableIndex = 0;
         Integer offset = 0;
 
-        String seedurl = CommonConfig.getNodeUrl() + CommonConfig.getLocalfullnodes();
-
         String url =  CommonDataDefine.localfullnodeUrl;
-
-
         HashMap<String,String> params = new HashMap<>();
 
         if(index == null){
@@ -112,13 +107,12 @@ public class TransactionsServiceImpl extends ServiceImpl<TransactionsMapper,Tran
                     accounts = JsonUtil.fromJson(new String(arr),new TypeToken<HashSet<String>>(){}.getType());
                 }
 
-                for(int i = 0 ; i < list.size(); i++){
+                for(int i = 0 ; i < (list != null?list.size():0) ; i++){
                     JSONObject trans = list.getJSONObject(i);
                     String fromaddress = trans.getString("fromAddress");
                     String toaddress = trans.getString("toAddress");
                     BigDecimal amount = trans.getBigDecimal("amount");
                     BigDecimal free = trans.getBigDecimal("free");
-
 
                     Transactions transactions = new Transactions.Builder()
                             .ehash(trans.getString("eHash"))
