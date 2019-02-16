@@ -112,7 +112,7 @@ public class TransactionsServiceImpl extends ServiceImpl<TransactionsMapper,Tran
                     String fromaddress = trans.getString("fromAddress");
                     String toaddress = trans.getString("toAddress");
                     BigDecimal amount = trans.getBigDecimal("amount");
-                    BigDecimal free = trans.getBigDecimal("free");
+                    BigDecimal fee = trans.getBigDecimal("fee");
 
                     Transactions transactions = new Transactions.Builder()
                             .ehash(trans.getString("eHash"))
@@ -147,12 +147,14 @@ public class TransactionsServiceImpl extends ServiceImpl<TransactionsMapper,Tran
                             toAddressAmount = new BigDecimal(new String(fromBytes));
                         }
 
+
+
                         if(amount != null) {
                             fromAddressAmount = fromAddressAmount.subtract(amount);
                             toAddressAmount = toAddressAmount.add(amount);
                         }
-                        if(free != null) {
-                            fromAddressAmount = fromAddressAmount.subtract(free);
+                        if(fee != null) {
+                            fromAddressAmount = fromAddressAmount.subtract(fee);
                         }
 
                         rocks.put(fromaddress,fromAddressAmount.toString());
