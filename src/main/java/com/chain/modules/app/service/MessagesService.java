@@ -1,10 +1,6 @@
 package com.chain.modules.app.service;
 
 
-import java.io.IOException;
-import java.security.KeyManagementException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 
 import com.chain.common.utils.R;
@@ -17,7 +13,7 @@ import com.chain.common.utils.R;
  */
 public interface MessagesService {
 
-    void getMessages() throws IOException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException;
+    void getMessages();
 
     Map<String,Object> selectByNull();
 

@@ -6,11 +6,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
-import java.security.KeyManagementException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-
 /**
  * @Author: zz
  * @Description:
@@ -30,17 +25,7 @@ public class MessagesTask {
     //拉取账户信息
     public void getMessages() {
         logger.info("定时任务开始 -->开始拉取节点信息~!");
-        try {
-            messagesService.getMessages();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (KeyStoreException e) {
-            e.printStackTrace();
-        } catch (KeyManagementException e) {
-            e.printStackTrace();
-        }
+        messagesService.getMessages();
         logger.info("定时任务开始 -->拉取节点信息结束~!");
     }
 
