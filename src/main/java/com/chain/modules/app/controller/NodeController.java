@@ -37,7 +37,10 @@ public class NodeController {
     public R preview() {
         if (CommonDataDefine.previewNum == 1) {
             CommonDataDefine.previewNum++;
-            messagesService.getMessages();
+            try {
+                messagesService.getMessages();
+            } catch (Exception e) {
+            }
         }
         return R.ok(messagesService.selectByNull());
     }
@@ -49,7 +52,10 @@ public class NodeController {
         Long oldTime = CommonDataDefine.transactionsTimestamp;
         Long newTime = Instant.now().getEpochSecond();
         if(newTime - oldTime > 30) {
-            transactionsService.requestTransactions();
+            try {
+                transactionsService.requestTransactions();
+            } catch (Exception e) {
+            }
             CommonDataDefine.transactionsTimestamp = Instant.now().getEpochSecond();
         }
         return transactionsService.getList(map);
