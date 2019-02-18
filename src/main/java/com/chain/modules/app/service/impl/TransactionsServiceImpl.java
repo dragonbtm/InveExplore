@@ -113,6 +113,7 @@ public class TransactionsServiceImpl extends ServiceImpl<TransactionsMapper,Tran
                     String toaddress = trans.getString("toAddress");
                     BigDecimal amount = trans.getBigDecimal("amount");
                     BigDecimal fee = trans.getBigDecimal("fee");
+                    BigDecimal nrgPrice = trans.getBigDecimal("nrgPrice");
 
                     Transactions transactions = new Transactions.Builder()
                             .ehash(trans.getString("eHash"))
@@ -153,8 +154,8 @@ public class TransactionsServiceImpl extends ServiceImpl<TransactionsMapper,Tran
                             fromAddressAmount = fromAddressAmount.subtract(amount);
                             toAddressAmount = toAddressAmount.add(amount);
                         }
-                        if(fee != null) {
-                            fromAddressAmount = fromAddressAmount.subtract(fee);
+                        if(fee != null && nrgPrice != null) {
+                            fromAddressAmount = fromAddressAmount.subtract(fee.multiply(nrgPrice));
                         }
 
                         rocks.put(fromaddress,fromAddressAmount.toString());
@@ -226,7 +227,17 @@ public class TransactionsServiceImpl extends ServiceImpl<TransactionsMapper,Tran
         for (Object tran : page.getRecords()) {
             String data = new String(rocksDb.get(((Transactions)tran).getHash()));
             try {
-                list.add(JSON.parseObject(data));
+                JSONObject jsonData = JSON.parseObject(data);
+                BigDecimal amount;
+                try{
+                    amount = jsonData.getBigDecimal("amount");
+                }catch (Exception e) {
+                    amount = BigDecimal.ZERO;
+                }
+                jsonData.put("amount",amount.toString());
+
+
+                list.add(jsonData);
             } catch (Exception e) {
                 e.printStackTrace();
                 log.error("json数据处理异常",e);

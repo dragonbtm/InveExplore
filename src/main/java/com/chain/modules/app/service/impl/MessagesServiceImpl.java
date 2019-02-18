@@ -175,7 +175,16 @@ public class MessagesServiceImpl implements MessagesService {
         byte[] d = rocksDb.get(hash);
         if(d != null) {
             String data = new String(d);
-            return R.ok().put("data", JSON.parseObject(data));
+            JSONObject jsonData = JSON.parseObject(data);
+            BigDecimal amount;
+            try{
+                amount = jsonData.getBigDecimal("amount");
+            }catch (Exception e) {
+                amount = BigDecimal.ZERO;
+            }
+            jsonData.put("amount",amount.toString());
+
+            return R.ok().put("data", jsonData);
         }else {
             return R.error("the hash not exist");
         }
@@ -220,6 +229,7 @@ public class MessagesServiceImpl implements MessagesService {
             Integer type = tranObj.getInteger("type");
             boolean isValid = tranObj.getBoolean("isValid");
             boolean isStable = tranObj.getBoolean("isStable");
+            tranObj.put("amount",amount.toString());
 
             tranList.add(tranObj);
             if(type == 1) {
@@ -238,7 +248,7 @@ public class MessagesServiceImpl implements MessagesService {
         total = new BigDecimal(new String(rocksDb.get(address)));
 
         PageUtils page = new PageUtils(tranList,tranList.size(),map.getLimit(),map.getCurrPage());
-        return R.ok().put("page",page).put("total",total).put("address",address).put("msgTotal",msgTotal);
+        return R.ok().put("page",page).put("total",total.toString()).put("address",address).put("msgTotal",msgTotal);
 
     }
 }
