@@ -247,7 +247,7 @@ public class MessagesServiceImpl implements MessagesService {
 
         total = new BigDecimal(new String(rocksDb.get(address)));
 
-        PageUtils page = new PageUtils(tranList,tranList.size(),map.getLimit(),map.getCurrPage());
+        PageUtils page = new PageUtils(tranList,msgTotal,map.getLimit(),map.getCurrPage());
         return R.ok().put("page",page).put("total",total.toString()).put("address",address).put("msgTotal",msgTotal);
 
     }

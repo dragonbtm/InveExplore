@@ -130,8 +130,10 @@ public class TransactionsServiceImpl extends ServiceImpl<TransactionsMapper,Tran
                     rocks.put(trans.getString("hash"),trans.toJSONString());
 
                     //统计地址
-                    accounts.add(fromaddress);
-                    accounts.add(toaddress);
+                    if(!StringUtils.isNull(fromaddress))
+                        accounts.add(fromaddress);
+                    if(!StringUtils.isNull(toaddress))
+                        accounts.add(toaddress);
 
                     //统计账户总金额
                     if(!transactions.getType().equals("3")) {
