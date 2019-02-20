@@ -128,12 +128,12 @@ public class MessagesServiceImpl implements MessagesService {
     public  Map<String,Object> selectByNull() {
         Date date = DateUtils.stringToDate(DateUtils.format(new Date(), "yyyy-MM-dd"),"yyyy-MM-dd");
         List<Messages> messages = messagesMapper.selectList();
-        Map<String,Object> map=new HashMap<String,Object>();
-        map.put("messages",messages.get(0));
+        Map<String,Object> map = new HashMap<String,Object>();
+        map.put("messages",messages.size() == 0 ? null : messages.get(0));
         int messageTotal = transactionsService.selectMessageTotal();
         map.put("messageTotal",messageTotal);
         List<Accounts> accounts = accountsMapper.selectList();
-        map.put("accountsTotal",accounts.get(0).getNumber());
+        map.put("accountsTotal",accounts.size() == 0 ? 0 : accounts.get(0).getNumber());
         return map;
 
 

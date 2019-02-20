@@ -1,6 +1,5 @@
 package com.chain.modules.app.controller;
 
-import com.chain.common.utils.PageUtils;
 import com.chain.common.utils.R;
 import com.chain.common.utils.StringUtils;
 import com.chain.config.CommonDataDefine;
