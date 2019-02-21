@@ -140,13 +140,12 @@ public class TransactionsServiceImpl extends ServiceImpl<TransactionsMapper,Tran
                     jsonData.put("remark",message.getString("remark"));
                     jsonData.put("nrgPrice",message.getString("nrgPrice"));
                     jsonData.put("type",message.getString("type"));
-
+                    Boolean isStable = message.getBoolean("isStable");
+                    Boolean isValid = message.getBoolean("isValid");
 
 
                     rocks.put(jsonData.getString("hash"),jsonData.toJSONString());
 
-                    String data2 = new String(rocks.get(jsonData.getString("hash")));
-                    JSONObject jsldasd = JSON.parseObject(data2);
 
                     //统计地址
                     if(!StringUtils.isNull(fromaddress))
@@ -155,7 +154,7 @@ public class TransactionsServiceImpl extends ServiceImpl<TransactionsMapper,Tran
                         accounts.add(toaddress);
 
                     //统计账户总金额
-                    if(!transactions.getType().equals("3")) {
+                    if(!transactions.getType().equals("3") && isStable && isValid) {
                         byte[] fromBytes = rocks.get(fromaddress);
                         byte[] toBytes = rocks.get(toaddress);
 

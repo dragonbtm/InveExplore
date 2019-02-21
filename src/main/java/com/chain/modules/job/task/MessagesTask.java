@@ -29,5 +29,12 @@ public class MessagesTask {
         logger.info("定时任务开始 -->拉取节点信息结束~!");
     }
 
+    /**
+     * 统计账户信息
+     */
+    public void countMessages() {
+        logger.info("定时任务开始 -->开始拉取节点信息~!");
+        logger.info("定时任务开始 -->拉取节点信息结束~!");
+    }
 
 }
