@@ -25,6 +25,7 @@ import java.math.BigDecimal;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.time.Instant;
 import java.util.*;
 
 /**
@@ -147,6 +148,13 @@ public class MessagesServiceImpl implements MessagesService {
     public R getGraphdDtas() {
         //14天消息数量
         List<Integer> messages = messagesMapper.selectTrans();
+        Long data17 = 1550332800L;
+        Long now = new Long((Instant.now().getEpochSecond() + "").substring(0,10));
+        int aaa = (int) ((now - data17) / 86400) - messages.size() + 1;
+        for(int i = aaa ; i > 1 ;i--) {
+            messages.add(1,0);
+        }
+
         int msgSiz = 14 - messages.size();
         if(msgSiz > 0) {
             for (int i = 0 ; i < msgSiz ; i++)
@@ -176,13 +184,6 @@ public class MessagesServiceImpl implements MessagesService {
         if(d != null) {
             String data = new String(d);
             JSONObject jsonData = JSON.parseObject(data);
-            BigDecimal amount;
-            try{
-                amount = jsonData.getBigDecimal("amount");
-            }catch (Exception e) {
-                amount = BigDecimal.ZERO;
-            }
-            jsonData.put("amount",amount.toString());
 
             return R.ok().put("data", jsonData);
         }else {

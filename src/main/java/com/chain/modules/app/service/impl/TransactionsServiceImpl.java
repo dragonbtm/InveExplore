@@ -119,7 +119,7 @@ public class TransactionsServiceImpl extends ServiceImpl<TransactionsMapper,Tran
 
                     Transactions transactions = new Transactions.Builder()
                             .ehash(trans.getString("eHash"))
-                            .hash(trans.getString("hash"))
+                            .hash(jsonData.getString("hash"))
                             .fromaddress(fromaddress)
                             .toaddress(toaddress)
                             .id(new BigInteger(jsonData.getString("id")))
@@ -129,7 +129,24 @@ public class TransactionsServiceImpl extends ServiceImpl<TransactionsMapper,Tran
                             .updatetime(jsonData.getLong("updateTime"))
                             .build();
                     transactionsMapper.insertSelective(transactions);
+
+                    //处理入库数据
+                    JSONObject message = jsonData.getJSONObject("message");
+                    jsonData.put("timestamp",message.getString("timestamp"));
+                    jsonData.put("fromAddress",message.getString("fromAddress"));
+                    jsonData.put("toAddress",message.getString("toAddress"));
+                    jsonData.put("amount",message.getString("amount"));
+                    jsonData.put("fee",message.getString("fee"));
+                    jsonData.put("remark",message.getString("remark"));
+                    jsonData.put("nrgPrice",message.getString("nrgPrice"));
+                    jsonData.put("type",message.getString("type"));
+
+
+
                     rocks.put(jsonData.getString("hash"),jsonData.toJSONString());
+
+                    String data2 = new String(rocks.get(jsonData.getString("hash")));
+                    JSONObject jsldasd = JSON.parseObject(data2);
 
                     //统计地址
                     if(!StringUtils.isNull(fromaddress))
@@ -149,7 +166,7 @@ public class TransactionsServiceImpl extends ServiceImpl<TransactionsMapper,Tran
                             fromAddressAmount = new BigDecimal(new String(fromBytes));
                         }
                         if(toBytes != null) {
-                            toAddressAmount = new BigDecimal(new String(fromBytes));
+                            toAddressAmount = new BigDecimal(new String(toBytes));
                         }
 
 
@@ -232,6 +249,7 @@ public class TransactionsServiceImpl extends ServiceImpl<TransactionsMapper,Tran
             String data = new String(rocksDb.get(((Transactions)tran).getHash()));
             try {
                 JSONObject jsonData = JSON.parseObject(data);
+
                 list.add(jsonData);
             } catch (Exception e) {
                 e.printStackTrace();

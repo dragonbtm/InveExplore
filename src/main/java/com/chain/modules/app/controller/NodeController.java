@@ -57,6 +57,7 @@ public class NodeController {
             }
             CommonDataDefine.transactionsTimestamp = Instant.now().getEpochSecond();
         }
+//        transactionsService.requestTransactions();
         return transactionsService.getList(map);
     }
 
